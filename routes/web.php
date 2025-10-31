@@ -5,6 +5,7 @@ use App\Http\Controllers\DashC;
 use App\Http\Controllers\Apoteker\ApotekerC;
 use App\Http\Controllers\Gudang\GudangC;
 use App\Http\Controllers\Inventory\InventoryC;
+use App\Http\Controllers\Inventory\KategoriC;
 use App\Http\Controllers\Kasir\KasirC;
 use Illuminate\Support\Facades\Route;
 
@@ -63,4 +64,13 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
     Route::get('/edit/{id}', [InventoryC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
     Route::put('/update/{id}', [InventoryC::class, 'update'])->name('update'); // Update data
     Route::delete('/destroy/{id}', [InventoryC::class, 'destroy'])->name('destroy'); // Hapus data
+});
+
+Route::prefix('kategori')->name('kategori.')->group(function () {
+    Route::get('/', [KategoriC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
+    Route::get('/create', [KategoriC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
+    Route::post('/store', [KategoriC::class, 'store'])->name('store'); // Simpan data baru
+    Route::get('/edit/{id}', [KategoriC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
+    Route::put('/update/{id}', [KategoriC::class, 'update'])->name('update'); // Update data
+    Route::delete('/destroy/{id}', [KategoriC::class, 'destroy'])->name('destroy'); // Hapus data
 });
