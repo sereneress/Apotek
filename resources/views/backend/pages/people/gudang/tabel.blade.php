@@ -1,0 +1,259 @@
+@extends('backend.master')
+
+@section('content')
+    <div class="main-content">
+        <!-- 🔹 TITLE SECTION -->
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Data Gudang</h3>
+                    <p class="text-subtitle text-muted">Kelola data petugas gudang dengan tampilan modern dan interaktif.</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Gudang</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔹 ANALYTICS CARD -->
+        <div class="analytics-card card border-0 rounded-4 mb-4 text-white"
+            style="background: linear-gradient(90deg, #16a085, #27ae60);">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-semibold mb-1">Gudang Overview</h5>
+                    <p class="mb-4 opacity-75">Statistik stok & aktivitas terbaru</p>
+
+                    <div class="d-flex flex-wrap gap-4">
+                        <div>
+                            <h6 class="mb-0">250</h6>
+                            <small class="opacity-75">Total Barang</small>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">20</h6>
+                            <small class="opacity-75">Stok Menipis</small>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">8</h6>
+                            <small class="opacity-75">Petugas Aktif</small>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">98%</h6>
+                            <small class="opacity-75">Kelengkapan Data</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 mt-md-0">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3275/3275970.png" alt="Gudang Icon"
+                        class="img-fluid" style="width: 120px; opacity: 0.9;">
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔹 TABLE SECTION -->
+        <section class="section mt-4">
+            <div class="card shadow border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center px-4 py-3">
+                    <h5 class="card-title mb-0 fw-semibold text-dark">
+                        <i class="bi bi-box-seam me-2 text-success"></i> Daftar Petugas Gudang
+                    </h5>
+                    <button class="btn btn-success btn-sm rounded-pill shadow-sm fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#modalTambahGudang">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Petugas
+                    </button>
+                </div>
+
+                <div class="card-body px-4 pb-4">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover modern-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Email</th>
+                                    <th>Telepon</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ([['Dwi Santoso', 'dwi@gudang.com', '08123456789', 'aktif'], ['Lina Marlina', 'lina@gudang.com', '08234567890', 'nonaktif'], ['Budi Saputra', 'budi@gudang.com', '08199887766', 'aktif']] as $i => $data)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $data[0] }}</td>
+                                        <td>{{ $data[1] }}</td>
+                                        <td>{{ $data[2] }}</td>
+                                        <td>
+                                            @if ($data[3] == 'aktif')
+                                                <span class="badge rounded-pill bg-soft-success text-success">Aktif</span>
+                                            @else
+                                                <span class="badge rounded-pill bg-soft-danger text-danger">Nonaktif</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-light-primary me-1" data-bs-toggle="modal"
+                                                data-bs-target="#modalEditGudang{{ $i }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-light-danger" data-bs-toggle="modal"
+                                                data-bs-target="#modalHapusGudang{{ $i }}">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 🔹 Modal Edit -->
+                                    <div class="modal fade" id="modalEditGudang{{ $i }}" tabindex="-1"
+                                        aria-labelledby="modalEditGudangLabel{{ $i }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content rounded-4 border-0 shadow">
+                                                <div class="modal-header border-0 pb-0">
+                                                    <h5 class="modal-title fw-semibold text-primary">
+                                                        <i class="bi bi-pencil-square me-2"></i>Edit Petugas Gudang
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body pt-2">
+                                                    <form action="#" method="POST">
+                                                        @csrf
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-semibold">Nama Lengkap</label>
+                                                                <input type="text" class="form-control modern-input"
+                                                                    value="{{ $data[0] }}">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-semibold">Email</label>
+                                                                <input type="email" class="form-control modern-input"
+                                                                    value="{{ $data[1] }}">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-semibold">Telepon</label>
+                                                                <input type="text" class="form-control modern-input"
+                                                                    value="{{ $data[2] }}">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-semibold">Status</label>
+                                                                <select class="form-select modern-input">
+                                                                    <option value="aktif"
+                                                                        {{ $data[3] == 'aktif' ? 'selected' : '' }}>Aktif
+                                                                    </option>
+                                                                    <option value="nonaktif"
+                                                                        {{ $data[3] == 'nonaktif' ? 'selected' : '' }}>
+                                                                        Nonaktif</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer border-0 pt-0">
+                                                    <button type="button" class="btn btn-light-secondary rounded-pill px-4"
+                                                        data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                                        <i class="bi bi-save me-1"></i> Simpan Perubahan
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 🔹 Modal Hapus -->
+                                    <div class="modal fade" id="modalHapusGudang{{ $i }}" tabindex="-1"
+                                        aria-labelledby="modalHapusGudangLabel{{ $i }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content rounded-4 border-0 shadow">
+                                                <div class="modal-header border-0">
+                                                    <h5 class="modal-title text-danger fw-semibold">
+                                                        <i class="bi bi-exclamation-triangle me-2"></i>Hapus Data
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <p class="mb-2">Apakah kamu yakin ingin menghapus petugas:</p>
+                                                    <h6 class="fw-bold text-dark">“{{ $data[0] }}”</h6>
+                                                    <p class="text-muted small mb-0">Data yang dihapus tidak dapat
+                                                        dikembalikan.</p>
+                                                </div>
+                                                <div class="modal-footer border-0 justify-content-center">
+                                                    <button type="button"
+                                                        class="btn btn-light-secondary rounded-pill px-4"
+                                                        data-bs-dismiss="modal">Batal</button>
+                                                    <button type="button" class="btn btn-danger rounded-pill px-4">
+                                                        <i class="bi bi-trash3 me-1"></i> Hapus
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔹 Modal Tambah -->
+        <div class="modal fade" id="modalTambahGudang" tabindex="-1" aria-labelledby="modalTambahGudangLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-semibold text-success">
+                            <i class="bi bi-person-plus me-2"></i>Tambah Petugas Gudang
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-2">
+                        <form action="#" method="POST" id="formTambahGudang">
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Nama Lengkap</label>
+                                    <input type="text" class="form-control modern-input" name="nama"
+                                        placeholder="Masukkan nama lengkap">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control modern-input" name="email"
+                                        placeholder="contoh@email.com">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Telepon</label>
+                                    <input type="text" class="form-control modern-input" name="telepon"
+                                        placeholder="08xxxxxxxxxx">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Status</label>
+                                    <select class="form-select modern-input" name="status">
+                                        <option value="aktif">Aktif</option>
+                                        <option value="nonaktif">Nonaktif</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Alamat</label>
+                                    <textarea class="form-control modern-input" name="alamat" rows="2" placeholder="Masukkan alamat lengkap"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light-secondary rounded-pill px-4"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-pill px-4" form="formTambahGudang">
+                            <i class="bi bi-save me-1"></i> Simpan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+@endsection

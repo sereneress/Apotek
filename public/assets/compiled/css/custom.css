@@ -1,0 +1,248 @@
+/* ============================= */
+/* Sidebar Modern Putih + Hijau  */
+/* ============================= */
+
+.sidebar-wrapper {
+    background-color: #ffffff; /* putih */
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-menu .sidebar-title {
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin: 1rem 1rem 0.5rem;
+}
+
+.sidebar-menu .sidebar-item .sidebar-link {
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu .sidebar-item .sidebar-link:hover {
+    background-color: #e9f5f3;
+    color: #28a745;
+}
+
+/* Ganti active menjadi activ */
+.sidebar-menu .sidebar-item.activ .sidebar-link {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Submenu */
+.sidebar-menu .submenu .submenu-item .submenu-link {
+    padding: 0.5rem 1rem;
+    color: #495057;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Hapus biru default saat klik/focus */
+.sidebar-menu .submenu .submenu-item .submenu-link:focus,
+.sidebar-menu .submenu .submenu-item .submenu-link:active,
+.sidebar-menu .submenu .submenu-item .submenu-link:visited {
+    outline: none;
+    color: #495057;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.sidebar-menu .submenu .submenu-item .submenu-link:hover {
+    background-color: #e9f5f3;
+    color: #28a745;
+}
+
+/* Ganti active submenu menjadi activ */
+.sidebar-menu .submenu .submenu-item.activ .submenu-link {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Profile Card Modern */
+.modern-profile {
+    background-color: #ffffff10; /* transparan, cocok dengan dark theme */
+    border-radius: 12px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.profile-img-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #28a745;
+    transition: all 0.3s;
+}
+
+.profile-img-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f0f0f;
+    margin: 0;
+}
+
+.profile-role {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #a5d6a7;
+    background-color: rgba(40, 167, 69, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* Pastikan main content tidak menabrak sidebar */
+.main-content {
+    margin-left: 300px; /* sesuaikan dengan lebar sidebar */
+    padding: 20px;
+}
+
+/* Styling tabel modern */
+#table1 {
+    min-width: 100%;
+}
+
+#table1 th,
+#table1 td {
+    vertical-align: middle;
+}
+
+/* Tombol aksi lebih compact */
+#table1 .btn {
+    margin-right: 5px;
+}
+
+/* Responsive di mobile */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+}
+
+.analytics-card {
+    background: linear-gradient(135deg, #459753 0%, #045301 100%);
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.analytics-card h6 {
+    font-weight: 600;
+}
+
+.analytics-card small {
+    display: block;
+}
+
+.analytics-card img {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* ======== Modern Table ======== */
+.modern-table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.modern-table thead tr {
+    background-color: #f8fafc;
+    color: #495057;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.modern-table tbody tr {
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-table tbody tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.modern-table th,
+.modern-table td {
+    border: none;
+    padding: 14px 18px;
+}
+
+.bg-soft-success {
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+.bg-soft-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* ======== Tombol Soft ======== */
+.btn-light-primary {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    border: none;
+}
+
+.btn-light-primary:hover {
+    background-color: rgba(13, 110, 253, 0.2);
+}
+
+.btn-light-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: none;
+}
+
+.btn-light-danger:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+}
+
+/* ======== Modern Modal Input ======== */
+.modern-input {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    padding: 10px 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+.modern-input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.1);
+}
+
+/* ======== Modal Styling ======== */
+.modal-content {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+}
