@@ -64,3 +64,12 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
     Route::put('/update/{id}', [InventoryC::class, 'update'])->name('update'); // Update data
     Route::delete('/destroy/{id}', [InventoryC::class, 'destroy'])->name('destroy'); // Hapus data
 });
+
+Route::prefix('Obat')->name('obat.')->group(function () {
+    Route::get('/', [InventoryC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
+    Route::get('/create', [InventoryC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
+    Route::post('/store', [InventoryC::class, 'store'])->name('store'); // Simpan data baru
+    Route::get('/edit/{id}', [InventoryC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
+    Route::put('/update/{id}', [InventoryC::class, 'update'])->name('update'); // Update data
+    Route::delete('/destroy/{id}', [InventoryC::class, 'destroy'])->name('destroy'); // Hapus data
+});

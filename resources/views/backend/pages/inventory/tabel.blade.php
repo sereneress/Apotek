@@ -120,12 +120,18 @@
         <!-- Tab Content -->
         <div class="tab-content mt-4">
             <div class="tab-pane fade show active" id="data-obat" role="tabpanel" aria-labelledby="data-obat-tab">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
+                    data-bs-target="#tambahObatModal">
+                    Tambah Obat
+                </button>
 
                 <div class="row g-3">
 
                     <!-- Obat 1 -->
                     <div class="col-6 col-md-4 col-lg-3">
                         <div class="card shadow-sm border-0 rounded-3 p-2">
+
                             <!-- Header: Nama Obat & Stok -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div class="fw-semibold fs-6 text-truncate">Paracetamol</div>
@@ -151,6 +157,45 @@
 
                 </div>
 
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="tambahObatModal" tabindex="-1" aria-labelledby="tambahObatModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="{{ route('obat.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="tambahObatModalLabel">Tambah Obat</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nama" class="form-label">Nama Obat</label>
+                                    <input type="text" name="nama" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="stok" class="form-label">Stok</label>
+                                    <input type="number" name="stok" class="form-control" min="0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kategori" class="form-label">Kategori</label>
+                                    <input type="text" name="kategori" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="harga" class="form-label">Harga</label>
+                                    <input type="number" name="harga" class="form-control" min="0" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div class="tab-pane fade" id="stok-obat" role="tabpanel" aria-labelledby="stok-obat-tab">
