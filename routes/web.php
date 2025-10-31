@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthC;
 use App\Http\Controllers\DashC;
 use App\Http\Controllers\Apoteker\ApotekerC;
 use App\Http\Controllers\Gudang\GudangC;
+use App\Http\Controllers\Inventory\InventoryC;
 use App\Http\Controllers\Kasir\KasirC;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +48,6 @@ Route::prefix('kasir')->name('kasir.')->group(function () {
 
 
 Route::prefix('gudang')->name('gudang.')->group(function () {
-<<<<<<< HEAD
     Route::get('/', [GudangC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
     Route::get('/create', [GudangC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
     Route::post('/store', [GudangC::class, 'store'])->name('store'); // Simpan data baru
@@ -56,12 +56,11 @@ Route::prefix('gudang')->name('gudang.')->group(function () {
     Route::delete('/destroy/{id}', [GudangC::class, 'destroy'])->name('destroy'); // Hapus data
 });
 
-=======
-    Route::get('/', [GudangC::class, 'index'])->name('tabel');
-    Route::get('/create', [GudangC::class, 'create'])->name('form');
-    Route::post('/store', [GudangC::class, 'store'])->name('store');
-    Route::get('/view/{id}', [GudangC::class, 'view'])->name('view');
-    Route::put('/update/{id}', [GudangC::class, 'update'])->name('update');
-    Route::delete('/delete/{id}', [GudangC::class, 'delete'])->name('delete'); // <- hapus 'dokter/'
+Route::prefix('inventory')->name('inventory.')->group(function () {
+    Route::get('/', [InventoryC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
+    Route::get('/create', [InventoryC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
+    Route::post('/store', [InventoryC::class, 'store'])->name('store'); // Simpan data baru
+    Route::get('/edit/{id}', [InventoryC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
+    Route::put('/update/{id}', [InventoryC::class, 'update'])->name('update'); // Update data
+    Route::delete('/destroy/{id}', [InventoryC::class, 'destroy'])->name('destroy'); // Hapus data
 });
->>>>>>> c410e5a8316167bdf026754654ee687a9ffd4d35

@@ -29,12 +29,12 @@
 
 .sidebar-menu .sidebar-item .sidebar-link:hover {
     background-color: #e9f5f3;
-    color: #28a745;
+    color: #22ca3e;
 }
 
 /* Ganti active menjadi activ */
 .sidebar-menu .sidebar-item.activ .sidebar-link {
-    background-color: #28a745;
+    background-color: #22ca3e;
     color: #fff;
     font-weight: 600;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
@@ -60,12 +60,12 @@
 
 .sidebar-menu .submenu .submenu-item .submenu-link:hover {
     background-color: #e9f5f3;
-    color: #28a745;
+    color: #22ca3e;
 }
 
 /* Ganti active submenu menjadi activ */
 .sidebar-menu .submenu .submenu-item.activ .submenu-link {
-    background-color: #28a745;
+    background-color: #22ca3e;
     color: #fff;
     font-weight: 500;
 }
@@ -86,7 +86,7 @@
     height: 70px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #28a745;
+    border: 2px solid #22ca3e;
     transition: all 0.3s;
 }
 
@@ -148,7 +148,7 @@
 }
 
 .analytics-card {
-    background: linear-gradient(135deg, #459753 0%, #045301 100%);
+    background: linear-gradient(135deg, #22ca3e 0%, #045301 100%);
     color: #fff;
     overflow: hidden;
     position: relative;
@@ -236,7 +236,7 @@
 }
 
 .modern-input:focus {
-    border-color: #198754;
+    border-color: #22ca3e;
     box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.1);
 }
 
@@ -245,4 +245,65 @@
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+}
+/* Hilangkan garis default */
+.nav-tabs {
+    border-bottom: none;
+}
+
+/* Card tab tetap modern */
+.nav-tabs .nav-item {
+    padding: 0.5rem;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    color: #495057;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    position: relative;
+}
+
+/* Hover effect */
+.nav-tabs .nav-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Active tab modern underline */
+.nav-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -6px; /* posisi underline */
+    left: 20%;
+    width: 60%; /* panjang underline */
+    height: 4px; /* tebal underline */
+    border-radius: 2px;
+    background: #22ca3e;
+    transition: all 0.3s ease;
+}
+
+/* Aktif warna tab */
+.nav-tabs .nav-link.active {
+    background: #22ca3e;
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+.nav-tabs .nav-link.active i {
+    color: #fff;
+}
+
+/* Tab content styling */
+.tab-content .tab-pane {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
