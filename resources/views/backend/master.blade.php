@@ -25,7 +25,7 @@
     <link rel="stylesheet" crossorigin href="assets/compiled/css/app-dark.css">
     <link rel="stylesheet" crossorigin href="assets/compiled/css/iconly.css">
     <link rel="stylesheet" href="assets/compiled/css/custom.css">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 
@@ -91,11 +91,20 @@
                         <div
                             class="sidebar-profile modern-profile d-flex flex-column align-items-center mt-2 p-3 rounded-3 shadow-sm">
                             <div class="profile-img-wrapper mb-2">
-                                <img src="assets/images/user.jpg" alt="User" class="profile-img">
+                                <img src="{{ asset('assets/images/user.jpg') }}" alt="User" class="profile-img">
                             </div>
-                            <h7 class="profile-name mb-1">Rizqia Akbar</h7>
-                            <span class="profile-role">Administrator</span>
+                            <h7 class="profile-name mb-1">{{ Auth::user()->name ?? 'Guest' }}</h7>
+                            <span class="profile-role text-capitalize">{{ session('roles')[0] ?? 'User' }}</span>
+
+                            <!-- 🔹 Tombol Logout -->
+                            <form action="{{ route('logout') }}" method="POST" class="mt-3 w-100">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm w-100 rounded-pill">
+                                    <i class="bi bi-box-arrow-right me-1"></i> Logout
+                                </button>
+                            </form>
                         </div>
+
                     </div>
 
 
@@ -218,8 +227,144 @@
             });
         });
     </script>
+    <!-- Script untuk isi deskripsi otomatis -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const kategoriSelect = document.getElementById('kategori_id');
+            const deskripsiTextarea = document.getElementById('deskripsi');
+
+            kategoriSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const deskripsi = selectedOption.getAttribute('data-deskripsi') || '';
+                deskripsiTextarea.value = deskripsi;
+            });
+        });
+    </script>
+
 </body>
 
+
+<script>
+    let keranjang = [];
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    function tambahKeranjang(id, nama, stok, harga) {
+        stok = parseInt(stok);
+        harga = parseFloat(harga);
+
+        if (stok <= 0) return alert("⚠️ Stok habis!");
+
+        let item = keranjang.find(i => i.id === id);
+        if (item) {
+            if (item.jumlah + 1 > stok) return alert("⚠️ Stok tidak mencukupi!");
+            item.jumlah++;
+        } else {
+            keranjang.push({
+                id,
+                nama,
+                harga,
+                jumlah: 1
+            });
+        }
+        renderKeranjang();
+    }
+
+    function hapusItem(id) {
+        keranjang = keranjang.filter(i => i.id !== id);
+        renderKeranjang();
+    }
+
+    function renderKeranjang() {
+        const container = document.getElementById("keranjangContainer");
+        container.innerHTML = "";
+
+        let total = 0;
+        keranjang.forEach(item => {
+            total += item.harga * item.jumlah;
+            const div = document.createElement("div");
+            div.className = "card p-2 d-flex flex-row justify-content-between align-items-center";
+            div.innerHTML = `
+                <div>
+                    <strong>${item.nama}</strong><br>
+                    <small>Rp ${item.harga.toLocaleString()} × ${item.jumlah}</small>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-danger" onclick="hapusItem(${item.id})">&times;</button>
+                </div>`;
+            container.appendChild(div);
+        });
+
+        document.getElementById("totalBayar").innerText = total.toLocaleString();
+    }
+
+    function prosesPenjualan() {
+        if (keranjang.length === 0) return alert("Keranjang kosong!");
+
+        fetch("{{ route('transaksi.penjualan.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({
+                    keranjang
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("✅ " + data.message);
+                    keranjang = [];
+                    renderKeranjang();
+                    // Optional: reload stok tanpa refresh seluruh halaman
+                    location.reload();
+                } else {
+                    alert("❌ " + (data.message || "Gagal menyimpan transaksi"));
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("❌ Terjadi kesalahan server.");
+            });
+    }
+
+    document.querySelectorAll(".tambah-keranjang").forEach(btn => {
+        btn.addEventListener("click", function() {
+            tambahKeranjang(
+                parseInt(this.dataset.id),
+                this.dataset.nama,
+                parseInt(this.dataset.stok),
+                parseFloat(this.dataset.harga)
+            );
+        });
+    });
+
+    document.getElementById("btnBayar").addEventListener("click", prosesPenjualan);
+</script>
+<script>
+    function tampilkanLaporan(url, title) {
+        document.getElementById('laporanModalLabel').innerText = title;
+        const modal = new bootstrap.Modal(document.getElementById('laporanModal'));
+        modal.show();
+
+        document.getElementById('laporanContent').innerHTML = `
+        <div class="text-center text-muted py-5">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2">Memuat laporan...</p>
+        </div>
+    `;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('laporanContent').innerHTML = html;
+            })
+            .catch(() => {
+                document.getElementById('laporanContent').innerHTML =
+                    '<div class="alert alert-danger">Gagal memuat laporan 😢</div>';
+            });
+    }
+</script>
 
 <!-- Mirrored from zuramai.github.io/mazer/demo/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 29 Oct 2025 17:43:33 GMT -->
 

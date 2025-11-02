@@ -60,6 +60,8 @@ class AuthC extends Controller
         // Redirect sesuai role utama (prioritas: admin > kasir > gudang)
         if (in_array('admin', $roles)) {
             return redirect()->route('dashboard');
+        } elseif (in_array('apoteker', $roles)) {
+            return redirect()->route('dashboard');
         } elseif (in_array('kasir', $roles)) {
             return redirect()->route('dashboard');
         } elseif (in_array('gudang', $roles)) {

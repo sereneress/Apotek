@@ -65,15 +65,16 @@
                 </a>
             </li>
             <li class="nav-item col-12 col-md-6 col-lg-4" role="presentation">
-                <a class="nav-link" id="stok-obat-tab" data-bs-toggle="tab" href="#stok-obat" role="tab"
-                    aria-controls="stok-obat" aria-selected="false">
-                    <i class="iconly-boldShow"></i>
+                <a class="nav-link" id="transaksi-penjualan-tab" data-bs-toggle="tab" href="#transaksi-penjualan"
+                    role="tab" aria-controls="transaksi-penjualan" aria-selected="false">
+                    <i class="iconly-boldBuy"></i> <!-- Bisa diganti icon sesuai penjualan -->
                     <div>
-                        <div class="fw-semibold">Stok Obat</div>
-                        <small>Tambah/Kurangi</small>
+                        <div class="fw-semibold">Transaksi Obat</div>
+                        <small>Pengeluaran / Penjualan</small>
                     </div>
                 </a>
             </li>
+
             <li class="nav-item col-12 col-md-6 col-lg-4" role="presentation">
                 <a class="nav-link" id="kategori-obat-tab" data-bs-toggle="tab" href="#kategori-obat" role="tab"
                     aria-controls="kategori-obat" aria-selected="false">
@@ -119,135 +120,155 @@
 
         <!-- Tab Content -->
         <div class="tab-content mt-4">
+            <!-- 🔹 Data Obat -->
             <div class="tab-pane fade show active" id="data-obat" role="tabpanel" aria-labelledby="data-obat-tab">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal"
-                    data-bs-target="#tambahObatModal">
-                    Tambah Obat
-                </button>
 
+                <!-- Header & Button Tambah Obat -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-semibold">Daftar Obat</h5>
+                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahObat">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Obat
+                    </button>
+                </div>
                 <div class="row g-3">
+                    @foreach ($obats as $obat)
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="card shadow-sm border-0 rounded-3 p-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="fw-semibold fs-6 text-truncate">{{ $obat->nama }}</div>
+                                    <span class="badge bg-success small">Stok: {{ $obat->stok }}</span>
+                                </div>
 
-                    <!-- Obat 1 -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card shadow-sm border-0 rounded-3 p-2">
+                                <div class="mb-1">
+                                    <small class="text-muted text-truncate">Kategori:
+                                        {{ $obat->kategori->nama_kategori ?? 'Kategori Tidak Ada' }}</small>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Harga: Rp
+                                        {{ number_format($obat->harga, 0, ',', '.') }}</small>
+                                </div>
 
-                            <!-- Header: Nama Obat & Stok -->
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div class="fw-semibold fs-6 text-truncate">Paracetamol</div>
-                                <span class="badge bg-success small">Stok: 15</span>
-                            </div>
-
-                            <!-- Kategori & Harga -->
-                            <div class="mb-1">
-                                <small class="text-muted text-truncate">Kategori: Analgesik</small>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted">Harga: Rp 5.000</small>
-                            </div>
-
-                            <!-- Modern Action (icon kecil) -->
-                            <div class="d-flex gap-1 justify-content-end">
-                                <button class="btn btn-outline-primary btn-sm py-0 px-2 rounded-pill">Edit</button>
-                                <button class="btn btn-outline-danger btn-sm py-0 px-2 rounded-pill">Hapus</button>
+                                <div class="d-flex gap-1 justify-content-end">
+                                    <a href="{{ route('obat.edit', $obat->id) }}"
+                                        class="btn btn-outline-primary btn-sm py-0 px-2 rounded-pill">Edit</a>
+                                    <form action="{{ route('obat.destroy', $obat->id) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="btn btn-outline-danger btn-sm py-0 px-2 rounded-pill">Hapus</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Tambahkan obat lainnya di sini -->
-
+                    @endforeach
                 </div>
+
 
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="tambahObatModal" tabindex="-1" aria-labelledby="tambahObatModalLabel"
+            <!-- Modal Tambah Obat -->
+            <div class="modal fade" id="modalTambahObat" tabindex="-1" aria-labelledby="modalTambahObatLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <form action="{{ route('obat.store') }}" method="POST">
                         @csrf
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="tambahObatModalLabel">Tambah Obat</h5>
+                                <h5 class="modal-title" id="modalTambahObatLabel">Tambah Obat Baru</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
+
                                 <div class="mb-3">
-                                    <label for="nama" class="form-label">Nama Obat</label>
-                                    <input type="text" name="nama" class="form-control" required>
+                                    <label for="nama_obat" class="form-label">Nama Obat</label>
+                                    <input type="text" name="nama_obat" id="nama_obat" class="form-control" required>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="kategori_id" class="form-label">Kategori</label>
+                                    <select name="kategori_id" id="kategori_id" class="form-select" required>
+                                        <option value="">-- Pilih Kategori --</option>
+                                        @foreach ($kategoris as $kategori)
+                                            <option value="{{ $kategori->id }}"
+                                                data-deskripsi="{{ $kategori->deskripsi }}">
+                                                {{ $kategori->nama_kategori }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="stok" class="form-label">Stok</label>
-                                    <input type="number" name="stok" class="form-control" min="0" required>
+                                    <input type="number" name="stok" id="stok" class="form-control"
+                                        value="0" readonly>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="kategori" class="form-label">Kategori</label>
-                                    <input type="text" name="kategori" class="form-control" required>
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="harga" class="form-label">Harga</label>
-                                    <input type="number" name="harga" class="form-control" min="0" required>
+                                    <input type="number" name="harga" id="harga" class="form-control"
+                                        min="0" required>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi" class="form-control" rows="2" readonly></textarea>
+                                </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-success">Simpan Obat</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="stok-obat" role="tabpanel" aria-labelledby="stok-obat-tab">
 
-                <div class="row g-3">
+            <div class="tab-pane fade" id="transaksi-penjualan" role="tabpanel"
+                aria-labelledby="transaksi-penjualan-tab">
 
-                    <!-- Obat 1 -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm border-0 rounded-3 p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div class="fw-semibold fs-6">Paracetamol</div>
-                                <span class="badge bg-success small">Stok: 15</span>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted">Kategori: Analgesik</small>
-                            </div>
-                            <div class="d-flex gap-2 mt-2">
-                                <button class="btn btn-sm btn-primary flex-grow-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalTambahStok1">Tambah Stok</button>
-                                <button class="btn btn-sm btn-warning flex-grow-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalKurangiStok1">Kurangi Stok</button>
+                <div class="row g-4">
+                    @foreach ($obats as $obat)
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="fw-bold fs-6">{{ $obat->nama }}</div>
+                                    <span class="badge bg-success small">Stok: {{ $obat->stok }}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Kategori:
+                                        {{ $obat->kategori->nama_kategori ?? '-' }}</small>
+                                </div>
+
+                                <button class="btn btn-primary w-100 tambah-keranjang" data-id="{{ $obat->id }}"
+                                    data-nama="{{ $obat->nama }}" data-stok="{{ $obat->stok }}"
+                                    data-harga="{{ $obat->harga }}">
+                                    Tambahkan ke Keranjang
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Obat 2 -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card shadow-sm border-0 rounded-3 p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div class="fw-semibold fs-6">Amoxicillin</div>
-                                <span class="badge bg-danger small">Stok: 3</span>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted">Kategori: Antibiotik</small>
-                            </div>
-                            <div class="d-flex gap-2 mt-2">
-                                <button class="btn btn-sm btn-primary flex-grow-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalTambahStok2">Tambah Stok</button>
-                                <button class="btn btn-sm btn-warning flex-grow-1" data-bs-toggle="modal"
-                                    data-bs-target="#modalKurangiStok2">Kurangi Stok</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tambahkan obat lain sesuai kebutuhan -->
-
+                    @endforeach
                 </div>
 
+                <!-- Keranjang -->
+                <div class="mt-5">
+                    <h6 class="mb-3">🛒 Keranjang Penjualan</h6>
+                    <div id="keranjangContainer" class="d-flex flex-column gap-2"></div>
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 gap-2">
+                        <div class="fs-5 fw-bold">Total: Rp <span id="totalBayar">0</span></div>
+                        <button class="btn btn-success btn-lg w-100 w-md-auto" id="btnBayar">
+                            💳 Proses Bayar
+                        </button>
+                    </div>
+                </div>
             </div>
 
 
-
+            <!-- 🔹 Kategori -->
             <div class="tab-pane fade" id="kategori-obat" role="tabpanel" aria-labelledby="kategori-obat-tab">
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -259,7 +280,7 @@
 
                 <div class="table-responsive shadow-sm rounded-3">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="">
+                        <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Nama Kategori</th>
@@ -268,253 +289,267 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Analgesik</td>
-                                <td>Obat penghilang rasa sakit.</td>
-
-                                <td class="text-center">
-                                    <div class="btn-group" role="group" aria-label="Aksi">
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit Kategori">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" title="Hapus Kategori">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </div>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Antibiotik</td>
-                                <td>Obat untuk infeksi bakteri.</td>
-
-                                <td class="text-center">
-                                    <div class="btn-group" role="group" aria-label="Aksi">
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit Kategori">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" title="Hapus Kategori">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </div>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Vitamin</td>
-                                <td>Obat suplemen dan vitamin.</td>
-
-                                <td class="text-center">
-                                    <div class="btn-group" role="group" aria-label="Aksi">
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit Kategori">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" title="Hapus Kategori">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </div>
-                                </td>
-
-                            </tr>
+                            @foreach ($kategoris as $index => $kategori)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $kategori->nama_kategori }}</td>
+                                    <td>{{ $kategori->deskripsi }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group" aria-label="Aksi">
+                                            <a href="{{ route('kategori.edit', $kategori->id) }}"
+                                                class="btn btn-sm btn-outline-warning" title="Edit Kategori">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    title="Hapus Kategori">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
+
                     </table>
                 </div>
 
             </div>
-            <div class="tab-pane fade" id="riwayat-stok" role="tabpanel" aria-labelledby="riwayat-stok-tab">
-
-                <h5 class="fw-semibold mb-3">Riwayat Stok Obat</h5>
-
-                <div class="list-group shadow-sm rounded-3">
-                    <!-- Item 1 -->
-                    <div
-                        class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
-                        <div class="mb-2 mb-md-0">
-                            <h6 class="mb-1">Paracetamol</h6>
-                            <small class="text-muted">31-10-2025 | Supplier ABC</small>
+            <!-- 🔹 Modal Tambah Kategori -->
+            <div class="modal fade" id="modalTambahKategori" tabindex="-1" aria-labelledby="modalTambahKategoriLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 border-0 shadow">
+                        <div class="modal-header border-0 pb-0">
+                            <h5 class="modal-title fw-semibold" id="modalTambahKategoriLabel">
+                                Tambah Kategori Obat
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-success">Masuk +50</span>
-                            <span class="text-muted">Stok: 150</span>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown">
-                                    <i class="bi bi-three-dots"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Detail</a>
-                                    </li>
-                                </ul>
+
+                        <form action="{{ route('kategori.store') }}" method="POST">
+                            @csrf
+                            <div class="modal-body pt-0">
+                                <div class="mb-3">
+                                    <label for="kode_kategori" class="form-label">Kode Kategori</label>
+                                    <input type="text" name="kode_kategori" id="kode_kategori" class="form-control"
+                                        placeholder="Masukkan kode kategori" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nama_kategori" class="form-label">Nama Kategori</label>
+                                    <input type="text" name="nama_kategori" id="nama_kategori" class="form-control"
+                                        placeholder="Masukkan nama kategori" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3"
+                                        placeholder="Masukkan deskripsi kategori"></textarea>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Item 2 -->
-                    <div
-                        class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
-                        <div class="mb-2 mb-md-0">
-                            <h6 class="mb-1">Amoxicillin</h6>
-                            <small class="text-muted">31-10-2025 | Penjualan</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-danger">Keluar -20</span>
-                            <span class="text-muted">Stok: 80</span>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown">
-                                    <i class="bi bi-three-dots"></i>
+                            <div class="modal-footer border-0 pt-0">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-plus-circle me-1"></i> Tambah
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Detail</a>
-                                    </li>
-                                </ul>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div
-                        class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
-                        <div class="mb-2 mb-md-0">
-                            <h6 class="mb-1">Vitamin C</h6>
-                            <small class="text-muted">30-10-2025 | Supplier XYZ</small>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-success">Masuk +100</span>
-                            <span class="text-muted">Stok: 200</span>
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown">
-                                    <i class="bi bi-three-dots"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Detail</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-
             </div>
+
+
+            <div class="tab-pane fade" id="riwayat-stok" role="tabpanel" aria-labelledby="riwayat-stok-tab">
+                <h5 class="fw-semibold mb-3">Riwayat Stok Obat</h5>
+
+                @if ($riwayatObats->count() > 0)
+                    <div class="list-group shadow-sm rounded-3">
+                        @foreach ($riwayatObats as $r)
+                            <div
+                                class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
+                                <div class="mb-2 mb-md-0">
+                                    <h6 class="mb-1 fw-semibold text-primary">
+                                        {{ $r->obat->nama ?? 'Obat tidak ditemukan' }}
+                                    </h6>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-hash"></i> Kode Transaksi:
+                                        <span class="fw-semibold text-dark">
+                                            {{ $r->sumber ?? '-' }}
+                                        </span>
+                                    </small>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-calendar2"></i> {{ $r->created_at->format('d M Y, H:i') }}
+                                        |
+                                        {{ $r->tipe == 'masuk' ? $r->keterangan ?? 'Penerimaan Supplier' : $r->keterangan ?? 'Penjualan' }}
+                                    </small>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-person"></i> {{ $r->user->username ?? 'Sistem' }}
+                                    </small>
+                                    <div class="d-flex flex-wrap gap-3 mt-2">
+                                        <span class="badge bg-light text-dark border">
+                                            Harga Satuan: <strong>Rp
+                                                {{ number_format($r->harga_satuan, 0, ',', '.') }}</strong>
+                                        </span>
+                                        <span class="badge bg-light text-dark border">
+                                            Total: <strong>Rp {{ number_format($r->total, 0, ',', '.') }}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3">
+                                    @if ($r->tipe == 'masuk')
+                                        <span class="badge bg-success px-3 py-2">Masuk +{{ $r->jumlah }}</span>
+                                    @else
+                                        <span class="badge bg-danger px-3 py-2">Keluar -{{ $r->jumlah }}</span>
+                                    @endif
+
+                                    <span class="text-muted small">
+                                        Stok Sekarang: <strong>{{ $r->obat->stok ?? '-' }}</strong>
+                                    </span>
+
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-eye me-2"></i>Detail
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="alert alert-light text-center border rounded-3">
+                        <i class="bi bi-clock-history me-2"></i> Belum ada riwayat stok obat.
+                    </div>
+                @endif
+            </div>
+
+
 
             <div class="tab-pane fade" id="transaksi-obat" role="tabpanel" aria-labelledby="transaksi-obat-tab">
                 <h5 class="fw-semibold mb-3">Transaksi Obat Masuk</h5>
 
-                <!-- Form Input Penerimaan Obat -->
-                <form class="row g-3 mb-4">
-                    <div class="col-md-4">
-                        <label class="form-label">Pilih Supplier</label>
-                        <select class="form-select">
-                            <option selected>-- Pilih Supplier --</option>
-                            <option value="1">Supplier ABC</option>
-                            <option value="2">Supplier XYZ</option>
+                <form action="{{ route('transaksi.store') }}" method="POST" class="row g-3 mb-4">
+                    @csrf
+
+                    <div class="col-md-3">
+                        <label for="kode_transaksi" class="form-label">Kode Transaksi</label>
+                        <input type="text" name="kode_transaksi" id="kode_transaksi" class="form-control"
+                            value="{{ 'TRX-' . date('Ymd') . '-' . rand(100, 999) }}" readonly>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="supplier" class="form-label">Supplier</label>
+                        <input type="text" name="supplier" id="supplier" class="form-control"
+                            placeholder="Masukkan nama supplier" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="obat_id" class="form-label">Obat</label>
+                        <select name="obat_id" id="obat_id" class="form-select" required>
+                            <option value="">-- Pilih Obat --</option>
+                            @foreach ($obats as $obat)
+                                <option value="{{ $obat->id }}" data-harga="{{ $obat->harga }}">
+                                    {{ $obat->nama }} | Stok: {{ $obat->stok }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Obat</label>
-                        <input type="text" class="form-control" placeholder="Nama Obat">
+
+                    <div class="col-md-3">
+                        <label for="jumlah" class="form-label">Jumlah</label>
+                        <input type="number" name="jumlah" id="jumlah" class="form-control" min="1"
+                            placeholder="0" required>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Jumlah</label>
-                        <input type="number" class="form-control" placeholder="0">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-success w-100">Tambah</button>
+
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">Tambah</button>
                     </div>
                 </form>
 
+
+
                 <!-- Riwayat Obat Masuk -->
                 <div class="list-group shadow-sm rounded-3">
-                    <div
-                        class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
-                        <div class="mb-2 mb-md-0">
-                            <h6 class="mb-1">Paracetamol 500mg</h6>
-                            <small class="text-muted">Masuk: 50 pcs | Supplier: ABC | Tanggal: 31-10-2025</small>
+                    @foreach ($transaksiObats as $transaksi)
+                        <div
+                            class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
+                            <div class="mb-2 mb-md-0">
+                                <h6 class="mb-1">{{ $transaksi->obat->nama ?? 'Obat Tidak Ada' }}</h6>
+                                <small class="text-muted">
+                                    Masuk: {{ $transaksi->jumlah }} pcs |
+                                    Supplier: {{ $transaksi->supplier }} |
+                                    Tanggal: {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d-m-Y') }}
+                                </small>
+                            </div>
+                            <span class="badge bg-success rounded-pill align-self-start">Masuk</span>
                         </div>
-                        <span class="badge bg-success rounded-pill align-self-start">Masuk</span>
-                    </div>
+                    @endforeach
+                </div>
+            </div>
 
-                    <div
-                        class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
-                        <div class="mb-2 mb-md-0">
-                            <h6 class="mb-1">Amoxicillin 250mg</h6>
-                            <small class="text-muted">Masuk: 30 pcs | Supplier: XYZ | Tanggal: 30-10-2025</small>
-                        </div>
-                        <span class="badge bg-success rounded-pill align-self-start">Masuk</span>
+
+            <div class="d-flex align-items-center justify-content-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white shadow rounded-4" style="max-width: 500px;">
+                    <div class="mb-3">
+                        <i class="bi bi-gear-wide-connected text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2">Sedang Dalam Pemeliharaan</h3>
+                    <p class="text-muted mb-4">
+                        Halaman ini sedang dalam proses pengembangan. Kami sedang menyiapkan fitur laporan yang lebih
+                        lengkap dan interaktif.
+                    </p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left-circle me-1"></i> Kembali
+                        </a>
+                        <button class="btn btn-warning text-white" disabled>
+                            <i class="bi bi-hourglass-split me-1"></i> Dalam Pengembangan
+                        </button>
+                    </div>
+                    <div class="mt-4">
+                        <small class="text-muted">© {{ date('Y') }} Klinik Mandiri — Sistem Inventory &
+                            Penjualan</small>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="laporan" role="tabpanel" aria-labelledby="laporan-tab">
-                <h5 class="fw-semibold mb-3">Laporan Inventory & Penjualan</h5>
-
-                <div class="row g-2">
-                    <!-- Laporan Penjualan Harian -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card shadow-sm rounded-3 border-0 p-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div>
-                                    <h6 class="mb-0 fw-semibold">Penjualan Harian</h6>
-                                    <small class="text-muted">Ringkasan hari ini</small>
-                                </div>
-                                <i class="bi bi-calendar2-day fs-4 text-primary"></i>
-                            </div>
-                            <button class="btn btn-sm btn-outline-primary w-100 mt-1">Lihat Laporan</button>
-                        </div>
+        <!-- Modal Laporan -->
+        <div class="modal fade" id="laporanModal" tabindex="-1" aria-labelledby="laporanModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="laporanModalLabel">Laporan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-
-                    <!-- Laporan Penjualan Bulanan -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card shadow-sm rounded-3 border-0 p-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div>
-                                    <h6 class="mb-0 fw-semibold">Penjualan Bulanan</h6>
-                                    <small class="text-muted">Ringkasan bulan ini</small>
-                                </div>
-                                <i class="bi bi-calendar2-month fs-4 text-success"></i>
-                            </div>
-                            <button class="btn btn-sm btn-outline-success w-100 mt-1">Lihat Laporan</button>
-                        </div>
-                    </div>
-
-                    <!-- Laporan Stok Obat -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card shadow-sm rounded-3 border-0 p-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div>
-                                    <h6 class="mb-0 fw-semibold">Stok Obat</h6>
-                                    <small class="text-muted">Obat tersedia & minimum stok</small>
-                                </div>
-                                <i class="bi bi-box-seam fs-4 text-warning"></i>
-                            </div>
-                            <button class="btn btn-sm btn-outline-warning w-100 mt-1">Lihat Laporan</button>
-                        </div>
-                    </div>
-
-                    <!-- Laporan Obat Kadaluarsa -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card shadow-sm rounded-3 border-0 p-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div>
-                                    <h6 class="mb-0 fw-semibold">Obat Kadaluarsa</h6>
-                                    <small class="text-muted">Daftar obat mendekati kadaluarsa</small>
-                                </div>
-                                <i class="bi bi-exclamation-triangle fs-4 text-danger"></i>
-                            </div>
-                            <button class="btn btn-sm btn-outline-danger w-100 mt-1">Lihat Laporan</button>
+                    <div class="modal-body" id="laporanContent">
+                        <div class="text-center text-muted py-5">
+                            <div class="spinner-border text-primary"></div>
+                            <p class="mt-2">Memuat laporan...</p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
-
-
-
     </div>
+
+
+
+
+</div>
 @endsection

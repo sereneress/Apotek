@@ -5,7 +5,12 @@ use App\Http\Controllers\DashC;
 use App\Http\Controllers\Apoteker\ApotekerC;
 use App\Http\Controllers\Gudang\GudangC;
 use App\Http\Controllers\Inventory\InventoryC;
+use App\Http\Controllers\Inventory\KategoriC;
+use App\Http\Controllers\Inventory\LaporanC;
 use App\Http\Controllers\Kasir\KasirC;
+use App\Http\Controllers\Inventory\ObatC;
+use App\Http\Controllers\Inventory\TransaksiC;
+use App\Http\Controllers\Inventory\TransaksiPenjualanC;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +33,10 @@ Route::post('/login', [AuthC::class, 'loginStore'])->name('login.store'); // Pro
 Route::get('/logout', [AuthC::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [DashC::class, 'index'])->middleware('auth')->name('dashboard');
+
+Route::get('/resepsionis/dashboard', [DashC::class, 'resepsionis'])->middleware('auth')->name('resepsionis.dashboard');
+Route::get('/farmasi/dashboard', [DashC::class, 'farmasi'])->middleware('auth')->name('farmasi.dashboard');
+Route::get('/dokter/dashboard', [DashC::class, 'dokter'])->middleware('auth')->name('dokter.dashboard');
 
 Route::prefix('apoteker')->name('apoteker.')->group(function () {
     Route::get('/', [ApotekerC::class, 'index'])->name('tabel');
@@ -65,11 +74,39 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
     Route::delete('/destroy/{id}', [InventoryC::class, 'destroy'])->name('destroy'); // Hapus data
 });
 
-Route::prefix('Obat')->name('obat.')->group(function () {
+Route::prefix('obat')->name('obat.')->group(function () {
     Route::get('/', [InventoryC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
-    Route::get('/create', [InventoryC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
-    Route::post('/store', [InventoryC::class, 'store'])->name('store'); // Simpan data baru
-    Route::get('/edit/{id}', [InventoryC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
-    Route::put('/update/{id}', [InventoryC::class, 'update'])->name('update'); // Update data
-    Route::delete('/destroy/{id}', [InventoryC::class, 'destroy'])->name('destroy'); // Hapus data
+    Route::get('/create', [ObatC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
+    Route::post('/store', [ObatC::class, 'store'])->name('store'); // Simpan data baru
+    Route::get('/edit/{id}', [ObatC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
+    Route::put('/update/{id}', [ObatC::class, 'update'])->name('update'); // Update data
+    Route::delete('/destroy/{id}', [ObatC::class, 'destroy'])->name('destroy'); // Hapus data
+});
+
+Route::prefix('kategori')->name('kategori.')->group(function () {
+    Route::get('/', [InventoryC::class, 'index'])->name('tabel'); // (Jika nanti ada form input baru)
+    Route::post('/store', [KategoriC::class, 'store'])->name('store'); // Simpan data baru
+    Route::get('/edit/{id}', [KategoriC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
+    Route::put('/update/{id}', [KategoriC::class, 'update'])->name('update'); // Update data
+    Route::delete('/destroy/{id}', [KategoriC::class, 'destroy'])->name('destroy'); // Hapus data
+});
+
+Route::prefix('transaksi')->name('transaksi.')->group(function () {
+    Route::get('/', [InventoryC::class, 'index'])->name('tabel'); // (Jika nanti ada form input baru)
+    Route::post('/store', [TransaksiC::class, 'store'])->name('store'); // Simpan data baru
+    Route::get('/edit/{id}', [TransaksiC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
+    Route::put('/update/{id}', [TransaksiC::class, 'update'])->name('update'); // Update data
+    Route::delete('/destroy/{id}', [TransaksiC::class, 'destroy'])->name('destroy'); // Hapus data
+});
+
+Route::prefix('transaksi')->name('transaksi.')->group(function () {
+    Route::get('/penjualan', [TransaksiPenjualanC::class, 'index'])->name('penjualan.index'); // halaman penjualan
+    Route::post('/penjualan/store', [TransaksiPenjualanC::class, 'store'])->name('penjualan.store'); // simpan transaksi
+});
+
+Route::prefix('laporan')->group(function () {
+    Route::get('/penjualan-harian', [LaporanC::class, 'penjualanHarian'])->name('laporan.harian');
+    Route::get('/penjualan-bulanan', [LaporanC::class, 'penjualanBulanan'])->name('laporan.bulanan');
+    Route::get('/stok-obat', [LaporanC::class, 'stokObat'])->name('laporan.stok');
+    Route::get('/obat-kadaluarsa', [LaporanC::class, 'obatKadaluarsa'])->name('laporan.kadaluarsa');
 });
