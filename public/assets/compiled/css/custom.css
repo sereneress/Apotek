@@ -307,3 +307,29 @@
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 128, 0, 0.2);
+}
+
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+.icon {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    transition: all 0.3s ease-in-out;
+}
+
+th {
+    white-space: nowrap;
+}

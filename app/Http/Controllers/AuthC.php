@@ -57,18 +57,14 @@ class AuthC extends Controller
         // Simpan roles ke session
         session(['roles' => $roles]);
 
-        // Redirect sesuai role utama (prioritas: admin > kasir > gudang)
         if (in_array('admin', $roles)) {
             return redirect()->route('dashboard');
         } elseif (in_array('apoteker', $roles)) {
-            return redirect()->route('dashboard');
-        } elseif (in_array('kasir', $roles)) {
-            return redirect()->route('dashboard');
+            return redirect()->route('apoteker.dashboard');
         } elseif (in_array('gudang', $roles)) {
-            return redirect()->route('dashboard');
+            return redirect()->route('gudang.dashboard');
         } else {
-            // Default fallback
-            return redirect('/dashboard');
+            return redirect()->route('dashboard');
         }
     }
 }

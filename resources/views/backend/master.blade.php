@@ -21,16 +21,16 @@
     <!-- Bootstrap 5 JS Bundle (dengan Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="stylesheet" crossorigin href="assets/compiled/css/app.css">
-    <link rel="stylesheet" crossorigin href="assets/compiled/css/app-dark.css">
-    <link rel="stylesheet" crossorigin href="assets/compiled/css/iconly.css">
-    <link rel="stylesheet" href="assets/compiled/css/custom.css">
+    <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/app.css') }}">
+    <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/app-dark.css') }}">
+    <link rel="stylesheet" crossorigin href="{{ asset('assets/compiled/css/iconly.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/compiled/css/custom.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     <div id="app">
         <div id="sidebar">
             <div class="sidebar-wrapper active">
@@ -83,7 +83,8 @@
                         <!-- Logo -->
                         <div class="logo mb-3">
                             <a href="index.html">
-                                <img src="assets/compiled/png/apotik.png" alt="Logo" class="sidebar-logo">
+                                <img src="{{ asset('assets/compiled/png/apotik.png') }}" alt="Logo"
+                                    class="sidebar-logo">
                             </a>
                         </div>
 
@@ -93,7 +94,7 @@
                             <div class="profile-img-wrapper mb-2">
                                 <img src="{{ asset('assets/images/user.jpg') }}" alt="User" class="profile-img">
                             </div>
-                            <h7 class="profile-name mb-1">{{ Auth::user()->name ?? 'Guest' }}</h7>
+                            <h7 class="profile-name mb-1">{{ Auth::user()->username ?? 'Guest' }}</h7>
                             <span class="profile-role text-capitalize">{{ session('roles')[0] ?? 'User' }}</span>
 
                             <!-- 🔹 Tombol Logout -->
@@ -104,48 +105,26 @@
                                 </button>
                             </form>
                         </div>
-
                     </div>
 
 
                     <!-- Sidebar Menu -->
-                    <div class="sidebar-menu mt-4">
-                        <ul class="menu">
-                            <li class="sidebar-item activ">
-                                <a href="/dashboard" class='sidebar-link'>
-                                    <i class="bi bi-grid-fill"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
 
-                            <li class="sidebar-title">Menu</li>
+                    @auth
+                        @switch(auth()->user()->reference_type)
+                            @case('App\\Models\\Apoteker')
+                                @include('backend.sidebars.apoteker')
+                            @break
+                            @case('App\\Models\\Gudang')
+                                @include('backend.sidebars.gudang')
+                            @break
 
-                            <li class="sidebar-item has-sub">
-                                <a href="#" class='sidebar-link'>
-                                    <i class="bi bi-stack"></i>
-                                    <span>User Management</span>
-                                </a>
-                                <ul class="submenu">
-                                    <li class="submenu-item">
-                                        <a href="{{ route('apoteker.tabel') }}" class="submenu-link">Apoteker</a>
-                                    </li>
-                                    <li class="submenu-item">
-                                        <a href="{{ route('kasir.tabel') }}" class="submenu-link">Kasir</a>
-                                    </li>
-                                    <li class="submenu-item">
-                                        <a href="{{ route('gudang.tabel') }}" class="submenu-link">Gudang</a>
-                                    </li>
-                                </ul>
-                            </li>
+                            @default
+                                @include('backend.sidebars.admin')
+                        @endswitch
+                    @endauth
 
-                            <li class="sidebar-item">
-                                <a href="{{ route('inventory.tabel') }}" class='sidebar-link'>
-                                    <i class="bi bi-gear-fill"></i>
-                                    <span>Inventory Obat</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+
                 </div>
 
 
@@ -153,17 +132,17 @@
         </div>
         @yield('content')
     </div>
-    <script src="assets/static/js/components/dark.js"></script>
-    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
+    <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
 
-    <script src="assets/compiled/js/app.js"></script>
+    <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
 
 
 
     <!-- Need: Apexcharts -->
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script>
+    <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/static/js/pages/dashboard.js') }}"></script>
     <script>
         document.querySelectorAll('.sidebar-item.has-sub > .sidebar-link').forEach(item => {
             item.addEventListener('click', function(e) {

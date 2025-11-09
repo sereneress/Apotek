@@ -3,46 +3,41 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
-use App\Models\TransaksiPenjualan;
-use App\Models\Obat;
+use App\Models\RiwayatObat;
+use Illuminate\Http\Request;
+use App\Models\TransaksiObat;
 use Carbon\Carbon;
 
 class LaporanC extends Controller
 {
-    public function penjualanHarian()
+    // 🔹 Laporan Harian
+    public function harian(Request $request)
     {
-        $today = Carbon::today();
-        $penjualan = TransaksiPenjualan::with('items.obat')
-            ->whereDate('tanggal_transaksi', $today)
+        $tanggal = $request->tanggal ?? date('Y-m-d');
+
+        $laporan = TransaksiObat::with('obat')
+            ->whereDate('tanggal_transaksi', $tanggal)
             ->get();
 
-        // Partial view (HTML saja)
-        return view('backend.pages.laporan._penjualan_harian', compact('penjualan', 'today'));
+        return view('backend.pages.laporan.harian', compact('laporan', 'tanggal'));
     }
 
-    public function penjualanBulanan()
+    // 🔹 Laporan Bulanan
+    public function bulanan(Request $request)
     {
-        $month = Carbon::now()->month;
-        $penjualan = TransaksiPenjualan::with('items.obat')
-            ->whereMonth('tanggal_transaksi', $month)
+        $bulan = $request->bulan ?? date('m');
+        $tahun = $request->tahun ?? date('Y');
+
+        // Ambil data dari tabel riwayat_obat
+        $laporan = RiwayatObat::with('obat')
+            ->selectRaw('obat_id, 
+                    SUM(CASE WHEN tipe = "masuk" THEN jumlah ELSE 0 END) as total_masuk,
+                    SUM(CASE WHEN tipe = "keluar" THEN jumlah ELSE 0 END) as total_keluar')
+            ->whereMonth('created_at', $bulan)
+            ->whereYear('created_at', $tahun)
+            ->groupBy('obat_id')
             ->get();
 
-        return view('backend.pages.laporan._penjualan_bulanan', compact('penjualan', 'month'));
-    }
-
-    public function stokObat()
-    {
-        $obats = Obat::all();
-        return view('backend.pages.laporan._stok_obat', compact('obats'));
-    }
-
-    public function obatKadaluarsa()
-    {
-        $today = Carbon::today();
-        $limit = $today->copy()->addDays(30);
-
-        $obats = Obat::whereDate('tanggal_kadaluarsa', '<=', $limit)->get();
-
-        return view('backend.pages.laporan._obat_kadaluarsa', compact('obats', 'today', 'limit'));
+        return view('backend.pages.laporan.bulanan', compact('laporan', 'bulan', 'tahun'));
     }
 }

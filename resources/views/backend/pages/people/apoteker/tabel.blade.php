@@ -71,7 +71,6 @@
                                     <th>#</th>
                                     <th>Nama Lengkap</th>
                                     <th>Email</th>
-                                    <th>Telepon</th>
                                     <th>Status</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -81,8 +80,7 @@
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
                                         <td>{{ $apoteker->person->name ?? '-' }}</td>
-                                        <td>{{ $apoteker->user->email ?? '-' }}</td>
-                                        <td>{{ $apoteker->user->person->phone ?? '-' }}</td> {{-- kalau ada kolom telepon --}}
+                                        <td>{{ $apoteker->user->email ?? '-' }}</td> {{-- kalau ada kolom telepon --}}
                                         <td>
                                             @if ($apoteker->status == 'aktif')
                                                 <span class="badge rounded-pill bg-soft-success text-success">Aktif</span>

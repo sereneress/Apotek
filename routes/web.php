@@ -30,13 +30,20 @@ Route::get('/', function () {
 
 Route::get('/login', [AuthC::class, 'login'])->name('login');       // Tampil form
 Route::post('/login', [AuthC::class, 'loginStore'])->name('login.store'); // Proses login
-Route::get('/logout', [AuthC::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthC::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [DashC::class, 'index'])->middleware('auth')->name('dashboard');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [DashC::class, 'index'])->name('dashboard');
+});
 
-Route::get('/resepsionis/dashboard', [DashC::class, 'resepsionis'])->middleware('auth')->name('resepsionis.dashboard');
-Route::get('/farmasi/dashboard', [DashC::class, 'farmasi'])->middleware('auth')->name('farmasi.dashboard');
-Route::get('/dokter/dashboard', [DashC::class, 'dokter'])->middleware('auth')->name('dokter.dashboard');
+Route::middleware(['auth', 'role:apoteker'])->group(function () {
+    Route::get('/apoteker/dashboard', [DashC::class, 'apoteker'])->name('apoteker.dashboard');
+});
+
+Route::middleware(['auth', 'role:gudang'])->group(function () {
+    Route::get('/gudang/dashboard', [DashC::class, 'gudang'])->name('gudang.dashboard');
+});
+
 
 Route::prefix('apoteker')->name('apoteker.')->group(function () {
     Route::get('/', [ApotekerC::class, 'index'])->name('tabel');
@@ -45,16 +52,6 @@ Route::prefix('apoteker')->name('apoteker.')->group(function () {
     Route::put('/update/{id}', [ApotekerC::class, 'update'])->name('update');
     Route::delete('/delete/{id}', [ApotekerC::class, 'destroy'])->name('destroy');
 });
-
-Route::prefix('kasir')->name('kasir.')->group(function () {
-    Route::get('/', [KasirC::class, 'index'])->name('tabel');          // menampilkan tabel kasir
-    Route::get('/create', [KasirC::class, 'create'])->name('form');     // form tambah kasir
-    Route::post('/store', [KasirC::class, 'store'])->name('store');     // simpan kasir baru
-    Route::get('/view/{id}', [KasirC::class, 'view'])->name('view');    // view detail kasir
-    Route::put('/update/{id}', [KasirC::class, 'update'])->name('update');  // update kasir
-    Route::delete('/delete/{id}', [KasirC::class, 'destroy'])->name('destroy'); // hapus kasir
-});
-
 
 Route::prefix('gudang')->name('gudang.')->group(function () {
     Route::get('/', [GudangC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
@@ -105,8 +102,6 @@ Route::prefix('transaksi')->name('transaksi.')->group(function () {
 });
 
 Route::prefix('laporan')->group(function () {
-    Route::get('/penjualan-harian', [LaporanC::class, 'penjualanHarian'])->name('laporan.harian');
-    Route::get('/penjualan-bulanan', [LaporanC::class, 'penjualanBulanan'])->name('laporan.bulanan');
-    Route::get('/stok-obat', [LaporanC::class, 'stokObat'])->name('laporan.stok');
-    Route::get('/obat-kadaluarsa', [LaporanC::class, 'obatKadaluarsa'])->name('laporan.kadaluarsa');
+    Route::get('/penjualan-harian', [LaporanC::class, 'harian'])->name('laporan.harian');
+    Route::get('/penjualan-bulanan', [LaporanC::class, 'bulanan'])->name('laporan.bulanan');
 });

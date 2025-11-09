@@ -21,81 +21,89 @@ class GudangC extends Controller
         return view('backend.pages.people.gudang.tabel', compact('gudangs'));
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:100',
-        'sex' => 'required|in:L,P',
-        'pob' => 'required|string|max:100',
-        'dob' => 'required|date',
-        'username' => 'required|string|max:100|unique:users,username',
-        'email' => 'nullable|email|max:150|unique:users,email',
-        'password' => 'required|confirmed|min:4',
-        'employment_status' => 'required|string',
-        'last_education' => 'nullable|string|max:255',
-        'shift' => 'nullable|string|max:50',
-        'warehouse_section' => 'nullable|string|max:255',
-        'start_date' => 'required|date',
-        'status' => 'required|string',
-        'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
-
-    DB::beginTransaction();
-    try {
-        $imagePath = $request->hasFile('profile_image')
-            ? $request->file('profile_image')->store('profiles', 'public')
-            : null;
-
-        $gudang = Gudang::create([
-            'employment_status' => $request->employment_status,
-            'last_education' => $request->last_education,
-            'shift' => $request->shift,
-            'warehouse_section' => $request->warehouse_section,
-            'start_date' => $request->start_date,
-            'profile_image' => $imagePath,
-            'status' => $request->status,
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'sex' => 'required|in:L,P',
+            'pob' => 'required|string|max:100',
+            'dob' => 'required|date',
+            'username' => 'required|string|max:100|unique:users,username',
+            'email' => 'nullable|email|max:150|unique:users,email',
+            'password' => 'required|confirmed|min:4',
+            'employment_status' => 'required|string',
+            'last_education' => 'nullable|string|max:255',
+            'shift' => 'nullable|string|max:50',
+            'warehouse_section' => 'nullable|string|max:255',
+            'start_date' => 'required|date',
+            'status' => 'required|string',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $person = People::create([
-            'name' => $request->name,
-            'sex' => $request->sex,
-            'pob' => $request->pob,
-            'dob' => $request->dob,
-            'personable_id' => $gudang->id,
-            'personable_type' => Gudang::class,
-        ]);
+        DB::beginTransaction();
 
-        $user = User::create([
-            'person_id' => $person->id,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'reference_id' => $gudang->id,
-            'reference_type' => Gudang::class,
-        ]);
+        try {
+            $imagePath = $request->hasFile('profile_image')
+                ? $request->file('profile_image')->store('profiles', 'public')
+                : null;
 
-        $gudang->update([
-            'person_id' => $person->id,
-            'user_id' => $user->id,
-        ]);
-
-        $role = Role::where('name', 'gudang')->first();
-        if ($role) {
-            DB::table('role_user')->insert([
-                'user_id' => $user->id,
-                'role_id' => $role->id,
-                'created_at' => now(),
-                'updated_at' => now(),
+            // 1️⃣ Buat People dulu (belum tahu personable_id karena Gudang belum ada)
+            $person = People::create([
+                'name' => $request->name,
+                'sex' => $request->sex,
+                'pob' => $request->pob,
+                'dob' => $request->dob,
             ]);
-        }
 
-        DB::commit();
-        return back()->with('success', 'Data gudang berhasil ditambahkan!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        dd($e->getMessage(), $e->getLine());
+            // 2️⃣ Baru buat Gudang dengan person_id
+            $gudang = Gudang::create([
+                'person_id' => $person->id,
+                'employment_status' => $request->employment_status,
+                'last_education' => $request->last_education,
+                'shift' => $request->shift,
+                'warehouse_section' => $request->warehouse_section,
+                'start_date' => $request->start_date,
+                'profile_image' => $imagePath,
+                'status' => $request->status,
+            ]);
+
+            // 3️⃣ Update People agar polymorphic ke Gudang
+            $person->update([
+                'personable_id' => $gudang->id,
+                'personable_type' => Gudang::class,
+            ]);
+
+            // 4️⃣ Buat User
+            $user = User::create([
+                'person_id' => $person->id,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'reference_id' => $gudang->id,
+                'reference_type' => Gudang::class,
+            ]);
+
+            // 5️⃣ Update Gudang dengan user_id
+            $gudang->update(['user_id' => $user->id]);
+
+            // 6️⃣ Tambahkan Role
+            $role = Role::where('name', 'gudang')->first();
+            if ($role) {
+                DB::table('role_user')->insert([
+                    'user_id' => $user->id,
+                    'role_id' => $role->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            DB::commit();
+            return back()->with('success', 'Data gudang berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage(), $e->getLine());
+        }
     }
-}
 
 
 
