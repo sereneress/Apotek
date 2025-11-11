@@ -108,76 +108,73 @@ class ApotekerC extends Controller
     }
   }
 
-  // 🔹 Update Apoteker
-  public function update(Request $request, $id)
-  {
+public function update(Request $request, $id)
+{
     $request->validate([
-      // 🔹 People
-      'name' => 'required|string|max:100',
-      'sex' => 'required|in:L,P',
-      'pob' => 'required|string|max:100',
-      'dob' => 'required|date',
-
-      // 🔹 User
-      'username' => 'required|string|max:100|unique:users,username,' . $id . ',reference_id',
-      'email' => 'nullable|email|max:150|unique:users,email,' . $id . ',reference_id',
-
-      // 🔹 Apoteker
-      'employment_status' => 'required|string',
-      'start_date' => 'required|date',
-      'status' => 'required|string',
-      'last_education' => 'nullable|string|max:255',
-      'shift' => 'nullable|string|max:50',
-      'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'username' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'sex' => 'required|in:L,P',
+        'dob' => 'nullable|date',
+        'pob' => 'nullable|string|max:255',
+        'status' => 'required|in:aktif,non-aktif',
+        'employment_status' => 'required|in:tetap,kontrak,magang',
+        'shift' => 'nullable|string|max:255',
+        'last_education' => 'nullable|string|max:255',
+        'license_number' => 'nullable|string|max:255',
+        'start_date' => 'nullable|date',
+        'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    DB::beginTransaction();
+    // 🔹 Ambil data apoteker
+    $apoteker = Apoteker::findOrFail($id);
 
-    try {
-      $apoteker = Apoteker::with(['person', 'user'])->findOrFail($id);
+    // 🔹 Update tabel user
+    $user = $apoteker->user;
+    $user->username = $request->username;
+    $user->email = $request->email;
+    $user->save();
 
-      // 🔹 Update gambar jika ada upload baru
-      if ($request->hasFile('profile_image')) {
-        if ($apoteker->profile_image) {
-          Storage::disk('public')->delete($apoteker->profile_image);
-        }
-        $imagePath = $request->file('profile_image')->store('profiles', 'public');
-      } else {
-        $imagePath = $apoteker->profile_image;
-      }
+    // 🔹 Update tabel person
+    $person = $apoteker->person;
+    $person->sex = $request->sex;
+    $person->dob = $request->dob;
+    $person->pob = $request->pob;
+    $person->save();
 
-      // 🔹 Update Apoteker
-      $apoteker->update([
-        'license_number' => $request->license_number,
-        'employment_status' => $request->employment_status,
-        'last_education' => $request->last_education,
-        'shift' => $request->shift,
-        'start_date' => $request->start_date,
-        'status' => $request->status,
-        'profile_image' => $imagePath,
-      ]);
+    // 🔹 Normalisasi ENUM agar sesuai database
+    $status = strtolower($request->status);
+    $employment_status = strtolower($request->employment_status);
 
-      // 🔹 Update People
-      $apoteker->person->update([
-        'name' => $request->name,
-        'sex' => $request->sex,
-        'pob' => $request->pob,
-        'dob' => $request->dob,
-      ]);
-
-      // 🔹 Update User
-      $apoteker->user->update([
-        'username' => $request->username,
-        'email' => $request->email,
-      ]);
-
-      DB::commit();
-      return back()->with('success', 'Apoteker berhasil diperbarui!');
-    } catch (\Exception $e) {
-      DB::rollBack();
-      return back()->with('error', 'Gagal memperbarui apoteker: ' . $e->getMessage());
+    // Ubah ejaan yang salah (misal: nonaktif -> non-aktif)
+    if ($status === 'nonaktif') {
+        $status = 'non-aktif';
     }
-  }
+
+    // 🔹 Update tabel apoteker
+    $apoteker->status = $status;
+    $apoteker->employment_status = $employment_status;
+    $apoteker->shift = $request->shift;
+    $apoteker->last_education = $request->last_education;
+    $apoteker->license_number = $request->license_number;
+    $apoteker->start_date = $request->start_date;
+
+    // 🔹 Upload foto jika ada
+    if ($request->hasFile('profile_image')) {
+        if ($apoteker->profile_image && Storage::exists('public/' . $apoteker->profile_image)) {
+            Storage::delete('public/' . $apoteker->profile_image);
+        }
+
+        $path = $request->file('profile_image')->store('apoteker', 'public');
+        $apoteker->profile_image = $path;
+    }
+
+    $apoteker->save();
+
+    return redirect()->back()->with('success', 'Data apoteker berhasil diperbarui!');
+}
+
+
+
 
 
   // 🔹 Hapus apoteker

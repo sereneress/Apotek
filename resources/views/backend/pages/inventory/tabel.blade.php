@@ -436,8 +436,6 @@
                 @endif
             </div>
 
-
-
             <div class="tab-pane fade" id="transaksi-obat" role="tabpanel" aria-labelledby="transaksi-obat-tab">
                 <h5 class="fw-semibold mb-3">Transaksi Obat Masuk</h5>
 
@@ -500,56 +498,62 @@
                 </div>
             </div>
 
+            <div class="tab-pane fade" id="laporan" role="tabpanel" aria-labelledby="laporan-tab">
+                <h5 class="fw-semibold mb-4 text-success">
+                    <i class="bi bi-bar-chart-line me-2"></i> Laporan Penjualan
+                </h5>
 
-            <div class="d-flex align-items-center justify-content-center vh-100 bg-light">
-                <div class="text-center p-5 bg-white shadow rounded-4" style="max-width: 500px;">
-                    <div class="mb-3">
-                        <i class="bi bi-gear-wide-connected text-warning" style="font-size: 4rem;"></i>
+                <div class="row g-4">
+                    {{-- === Laporan Harian === --}}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 text-center p-4 hover-shadow transition-all">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <i class="bi bi-calendar-day display-4 text-success"></i>
+                                </div>
+                                <h5 class="fw-semibold mb-3 text-dark">Laporan Harian</h5>
+                                <p class="text-muted small mb-4">
+                                    Lihat data transaksi penjualan untuk hari ini.
+                                </p>
+                                <a href="{{ route('laporan.harian') }}"
+                                    class="btn btn-success btn-lg px-4 rounded-pill shadow-sm">
+                                    <i class="bi bi-arrow-right-circle me-2"></i> Tampilkan
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="fw-bold mb-2">Sedang Dalam Pemeliharaan</h3>
-                    <p class="text-muted mb-4">
-                        Halaman ini sedang dalam proses pengembangan. Kami sedang menyiapkan fitur laporan yang lebih
-                        lengkap dan interaktif.
-                    </p>
-                    <div class="d-flex justify-content-center gap-2">
-                        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left-circle me-1"></i> Kembali
-                        </a>
-                        <button class="btn btn-warning text-white" disabled>
-                            <i class="bi bi-hourglass-split me-1"></i> Dalam Pengembangan
-                        </button>
-                    </div>
-                    <div class="mt-4">
-                        <small class="text-muted">© {{ date('Y') }} Klinik Mandiri — Sistem Inventory &
-                            Penjualan</small>
-                    </div>
-                </div>
-            </div>
 
-        <!-- Modal Laporan -->
-        <div class="modal fade" id="laporanModal" tabindex="-1" aria-labelledby="laporanModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="laporanModalLabel">Laporan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="laporanContent">
-                        <div class="text-center text-muted py-5">
-                            <div class="spinner-border text-primary"></div>
-                            <p class="mt-2">Memuat laporan...</p>
+                    {{-- === Laporan Bulanan === --}}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 text-center p-4 hover-shadow transition-all">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <i class="bi bi-calendar3 display-4 text-success"></i>
+                                </div>
+                                <h5 class="fw-semibold mb-3 text-dark">Laporan Bulanan</h5>
+                                <p class="text-muted small mb-4">
+                                    Lihat total penjualan dan pendapatan selama bulan ini.
+                                </p>
+                                <a href="{{ route('laporan.bulanan') }}"
+                                    class="btn btn-success btn-lg px-4 rounded-pill shadow-sm">
+                                    <i class="bi bi-arrow-right-circle me-2"></i> Tampilkan
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
+
         </div>
 
+
+
+
     </div>
-
-
-
-
-</div>
 @endsection

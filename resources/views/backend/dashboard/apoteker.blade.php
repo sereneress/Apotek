@@ -1,167 +1,423 @@
 @extends('backend.master')
 
 @section('content')
-    <div id="main">
-        <header class="mb-3">
-            <a href="#" class="burger-btn d-block d-xl-none">
-                <i class="bi bi-justify fs-3"></i>
-            </a>
-        </header>
-
-        <div class="page-heading">
-            <h3>Profile Statistics</h3>
-        </div>
-        <div class="page-content">
-            <section class="row">
-                <div class="col-12 col-lg-9">
-                    <div class="row">
-                        <div class="col-6 col-lg-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body px-4 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                            <div class="stats-icon purple mb-2">
-                                                <i class="iconly-boldShow"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="text-muted font-semibold">Profile Views</h6>
-                                            <h6 class="font-extrabold mb-0">112.000</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body px-4 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                            <div class="stats-icon blue mb-2">
-                                                <i class="iconly-boldProfile"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="text-muted font-semibold">Followers</h6>
-                                            <h6 class="font-extrabold mb-0">183.000</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body px-4 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                            <div class="stats-icon green mb-2">
-                                                <i class="iconly-boldAdd-User"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="text-muted font-semibold">Following</h6>
-                                            <h6 class="font-extrabold mb-0">80.000</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body px-4 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                            <div class="stats-icon red mb-2">
-                                                <i class="iconly-boldBookmark"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                            <h6 class="text-muted font-semibold">Saved Post</h6>
-                                            <h6 class="font-extrabold mb-0">112</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Profile Visit</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div id="chart-profile-visit"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="main-content">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Management Inventory Obat</h3>
+                    <p class="text-subtitle text-muted">Tabel statis, sortable dan responsive.</p>
                 </div>
-                <div class="col-12 col-lg-3">
-                    <div class="card">
-                        <div class="card-body py-4 px-4">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xl">
-                                    <img src="assets/compiled/jpg/1.jpg" alt="Face 1">
-                                </div>
-                                <div class="ms-3 name">
-                                    <h5 class="font-bold">John Duck</h5>
-                                    <h6 class="text-muted mb-0">@johnducky</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Recent Messages</h4>
-                        </div>
-                        <div class="card-content pb-4">
-                            <div class="recent-message d-flex px-4 py-3">
-                                <div class="avatar avatar-lg">
-                                    <img src="assets/compiled/jpg/4.jpg">
-                                </div>
-                                <div class="name ms-4">
-                                    <h5 class="mb-1">Hank Schrader</h5>
-                                    <h6 class="text-muted mb-0">@johnducky</h6>
-                                </div>
-                            </div>
-                            <div class="recent-message d-flex px-4 py-3">
-                                <div class="avatar avatar-lg">
-                                    <img src="assets/compiled/jpg/5.jpg">
-                                </div>
-                                <div class="name ms-4">
-                                    <h5 class="mb-1">Dean Winchester</h5>
-                                    <h6 class="text-muted mb-0">@imdean</h6>
-                                </div>
-                            </div>
-                            <div class="recent-message d-flex px-4 py-3">
-                                <div class="avatar avatar-lg">
-                                    <img src="assets/compiled/jpg/1.jpg">
-                                </div>
-                                <div class="name ms-4">
-                                    <h5 class="mb-1">John Dodol</h5>
-                                    <h6 class="text-muted mb-0">@dodoljohn</h6>
-                                </div>
-                            </div>
-                            <div class="px-4">
-                                <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>Start
-                                    Conversation</button>
-                            </div>
-                        </div>
-                    </div>
-            </section>
-        </div>
-
-        <footer>
-            <div class="footer clearfix mb-0 text-muted">
-                <div class="float-start">
-                    <p>2023 &copy; Mazer</p>
-                </div>
-                <div class="float-end">
-                    <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                        by <a href="https://saugi.me/">Saugi</a></p>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Apoteker</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
-        </footer>
+        </div>
+        <div class="analytics-card card border-0 rounded-4 mb-4 text-white">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-semibold mb-1">Website Analytics</h5>
+                    <p class="mb-4 opacity-75">Total 28.5% Conversion Rate</p>
+
+                    <div class="d-flex flex-wrap gap-3">
+                        <div>
+                            <h6 class="mb-0">1.6k</h6>
+                            <small class="opacity-75">Sessions</small>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">3.1k</h6>
+                            <small class="opacity-75">Page Views</small>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">1.2k</h6>
+                            <small class="opacity-75">Leads</small>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">12%</h6>
+                            <small class="opacity-75">Conversions</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 mt-md-0">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" alt="Analytics Icon"
+                        class="img-fluid" style="width: 120px; opacity: 0.9;">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Nav Tabs as Rectangular Cards -->
+        <ul class="nav nav-tabs flex-wrap g-3" id="inventoryTabs" role="tablist">
+            <li class="nav-item col-12 col-md-6 col-lg-4" role="presentation">
+                <a class="nav-link active" id="data-obat-tab" data-bs-toggle="tab" href="#data-obat" role="tab"
+                    aria-controls="data-obat" aria-selected="true">
+                    <i class="iconly-boldProfile"></i>
+                    <div>
+                        <div class="fw-semibold">Data Obat</div>
+                        <small>Lihat/Edit</small>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item col-12 col-md-6 col-lg-4" role="presentation">
+                <a class="nav-link" id="transaksi-penjualan-tab" data-bs-toggle="tab" href="#transaksi-penjualan"
+                    role="tab" aria-controls="transaksi-penjualan" aria-selected="false">
+                    <i class="iconly-boldBuy"></i> <!-- Bisa diganti icon sesuai penjualan -->
+                    <div>
+                        <div class="fw-semibold">Transaksi Obat</div>
+                        <small>Pengeluaran / Penjualan</small>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item col-12 col-md-6 col-lg-4" role="presentation">
+                <a class="nav-link" id="kategori-obat-tab" data-bs-toggle="tab" href="#kategori-obat" role="tab"
+                    aria-controls="kategori-obat" aria-selected="false">
+                    <i class="iconly-boldBookmark"></i>
+                    <div>
+                        <div class="fw-semibold">Kategori</div>
+                        <small>Manage Kategori</small>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item col-12 col-md-6 col-lg-4" role="presentation">
+                <a class="nav-link" id="riwayat-stok-tab" data-bs-toggle="tab" href="#riwayat-stok" role="tab"
+                    aria-controls="riwayat-stok" aria-selected="false">
+                    <i class="iconly-boldDocument"></i>
+                    <div>
+                        <div class="fw-semibold">Riwayat Transaksi</div>
+                        <small>Riwayat Transaksi Obat</small>
+                    </div>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-4">
+            <!-- 🔹 Data Obat -->
+            <div class="tab-pane fade show active" id="data-obat" role="tabpanel" aria-labelledby="data-obat-tab">
+
+                <!-- Header & Button Tambah Obat -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-semibold">Daftar Obat</h5>
+                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahObat">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Obat
+                    </button>
+                </div>
+                <div class="row g-3">
+                    @foreach ($obats as $obat)
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="card shadow-sm border-0 rounded-3 p-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="fw-semibold fs-6 text-truncate">{{ $obat->nama }}</div>
+                                    <span class="badge bg-success small">Stok: {{ $obat->stok }}</span>
+                                </div>
+
+                                <div class="mb-1">
+                                    <small class="text-muted text-truncate">Kategori:
+                                        {{ $obat->kategori->nama_kategori ?? 'Kategori Tidak Ada' }}</small>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Harga: Rp
+                                        {{ number_format($obat->harga, 0, ',', '.') }}</small>
+                                </div>
+
+                                <div class="d-flex gap-1 justify-content-end">
+                                    <a href="{{ route('obat.edit', $obat->id) }}"
+                                        class="btn btn-outline-primary btn-sm py-0 px-2 rounded-pill">Edit</a>
+                                    <form action="{{ route('obat.destroy', $obat->id) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="btn btn-outline-danger btn-sm py-0 px-2 rounded-pill">Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+
+            </div>
+
+            <!-- Modal Tambah Obat -->
+            <div class="modal fade" id="modalTambahObat" tabindex="-1" aria-labelledby="modalTambahObatLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="{{ route('obat.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalTambahObatLabel">Tambah Obat Baru</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="mb-3">
+                                    <label for="nama_obat" class="form-label">Nama Obat</label>
+                                    <input type="text" name="nama_obat" id="nama_obat" class="form-control" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="kategori_id" class="form-label">Kategori</label>
+                                    <select name="kategori_id" id="kategori_id" class="form-select" required>
+                                        <option value="">-- Pilih Kategori --</option>
+                                        @foreach ($kategoris as $kategori)
+                                            <option value="{{ $kategori->id }}"
+                                                data-deskripsi="{{ $kategori->deskripsi }}">
+                                                {{ $kategori->nama_kategori }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="stok" class="form-label">Stok</label>
+                                    <input type="number" name="stok" id="stok" class="form-control"
+                                        value="0" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="harga" class="form-label">Harga</label>
+                                    <input type="number" name="harga" id="harga" class="form-control"
+                                        min="0" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi" class="form-control" rows="2" readonly></textarea>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-success">Simpan Obat</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="transaksi-penjualan" role="tabpanel"
+                aria-labelledby="transaksi-penjualan-tab">
+
+                <div class="row g-4">
+                    @foreach ($obats as $obat)
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="fw-bold fs-6">{{ $obat->nama }}</div>
+                                    <span class="badge bg-success small">Stok: {{ $obat->stok }}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Kategori:
+                                        {{ $obat->kategori->nama_kategori ?? '-' }}</small>
+                                </div>
+
+                                <button class="btn btn-primary w-100 tambah-keranjang" data-id="{{ $obat->id }}"
+                                    data-nama="{{ $obat->nama }}" data-stok="{{ $obat->stok }}"
+                                    data-harga="{{ $obat->harga }}">
+                                    Tambahkan ke Keranjang
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Keranjang -->
+                <div class="mt-5">
+                    <h6 class="mb-3">🛒 Keranjang Penjualan</h6>
+                    <div id="keranjangContainer" class="d-flex flex-column gap-2"></div>
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3 gap-2">
+                        <div class="fs-5 fw-bold">Total: Rp <span id="totalBayar">0</span></div>
+                        <button class="btn btn-success btn-lg w-100 w-md-auto" id="btnBayar">
+                            💳 Proses Bayar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 🔹 Kategori -->
+            <div class="tab-pane fade" id="kategori-obat" role="tabpanel" aria-labelledby="kategori-obat-tab">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-semibold">Daftar Kategori Obat</h5>
+                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahKategori">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Kategori
+                    </button>
+                </div>
+
+                <div class="table-responsive shadow-sm rounded-3">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Kategori</th>
+                                <th>Deskripsi</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($kategoris as $index => $kategori)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $kategori->nama_kategori }}</td>
+                                    <td>{{ $kategori->deskripsi }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group" aria-label="Aksi">
+                                            <a href="{{ route('kategori.edit', $kategori->id) }}"
+                                                class="btn btn-sm btn-outline-warning" title="Edit Kategori">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    title="Hapus Kategori">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+            <!-- 🔹 Modal Tambah Kategori -->
+            <div class="modal fade" id="modalTambahKategori" tabindex="-1" aria-labelledby="modalTambahKategoriLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 border-0 shadow">
+                        <div class="modal-header border-0 pb-0">
+                            <h5 class="modal-title fw-semibold" id="modalTambahKategoriLabel">
+                                Tambah Kategori Obat
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+
+                        <form action="{{ route('kategori.store') }}" method="POST">
+                            @csrf
+                            <div class="modal-body pt-0">
+                                <div class="mb-3">
+                                    <label for="kode_kategori" class="form-label">Kode Kategori</label>
+                                    <input type="text" name="kode_kategori" id="kode_kategori" class="form-control"
+                                        placeholder="Masukkan kode kategori" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nama_kategori" class="form-label">Nama Kategori</label>
+                                    <input type="text" name="nama_kategori" id="nama_kategori" class="form-control"
+                                        placeholder="Masukkan nama kategori" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3"
+                                        placeholder="Masukkan deskripsi kategori"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer border-0 pt-0">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-plus-circle me-1"></i> Tambah
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="riwayat-stok" role="tabpanel" aria-labelledby="riwayat-stok-tab">
+                <h5 class="fw-semibold mb-3">Riwayat Stok Obat</h5>
+
+                @if ($riwayatObats->count() > 0)
+                    <div class="list-group shadow-sm rounded-3">
+                        @foreach ($riwayatObats as $r)
+                            <div
+                                class="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row mb-2 p-3 rounded-3 border">
+                                <div class="mb-2 mb-md-0">
+                                    <h6 class="mb-1 fw-semibold text-primary">
+                                        {{ $r->obat->nama ?? 'Obat tidak ditemukan' }}
+                                    </h6>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-hash"></i> Kode Transaksi:
+                                        <span class="fw-semibold text-dark">
+                                            {{ $r->sumber ?? '-' }}
+                                        </span>
+                                    </small>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-calendar2"></i> {{ $r->created_at->format('d M Y, H:i') }}
+                                        |
+                                        {{ $r->tipe == 'masuk' ? $r->keterangan ?? 'Penerimaan Supplier' : $r->keterangan ?? 'Penjualan' }}
+                                    </small>
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="bi bi-person"></i> {{ $r->user->username ?? 'Sistem' }}
+                                    </small>
+                                    <div class="d-flex flex-wrap gap-3 mt-2">
+                                        <span class="badge bg-light text-dark border">
+                                            Harga Satuan: <strong>Rp
+                                                {{ number_format($r->harga_satuan, 0, ',', '.') }}</strong>
+                                        </span>
+                                        <span class="badge bg-light text-dark border">
+                                            Total: <strong>Rp {{ number_format($r->total, 0, ',', '.') }}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3">
+                                    @if ($r->tipe == 'masuk')
+                                        <span class="badge bg-success px-3 py-2">Masuk +{{ $r->jumlah }}</span>
+                                    @else
+                                        <span class="badge bg-danger px-3 py-2">Keluar -{{ $r->jumlah }}</span>
+                                    @endif
+
+                                    <span class="text-muted small">
+                                        Stok Sekarang: <strong>{{ $r->obat->stok ?? '-' }}</strong>
+                                    </span>
+
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="bi bi-eye me-2"></i>Detail
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="alert alert-light text-center border rounded-3">
+                        <i class="bi bi-clock-history me-2"></i> Belum ada riwayat stok obat.
+                    </div>
+                @endif
+            </div>
+        </div>
+
+
+
+
     </div>
 @endsection
