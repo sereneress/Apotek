@@ -108,70 +108,83 @@ class ApotekerC extends Controller
     }
   }
 
-public function update(Request $request, $id)
-{
+  public function update(Request $request, $id)
+  {
     $request->validate([
-        'username' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'sex' => 'required|in:L,P',
-        'dob' => 'nullable|date',
-        'pob' => 'nullable|string|max:255',
-        'status' => 'required|in:aktif,non-aktif',
-        'employment_status' => 'required|in:tetap,kontrak,magang',
-        'shift' => 'nullable|string|max:255',
-        'last_education' => 'nullable|string|max:255',
-        'license_number' => 'nullable|string|max:255',
-        'start_date' => 'nullable|date',
-        'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+      'name'              => 'required|string|max:100',
+      'sex'               => 'required|in:L,P',
+      'pob'               => 'required|string|max:100',
+      'dob'               => 'required|date',
+      'username'          => 'required|string|max:100|unique:users,username,' . $id . ',reference_id',
+      'email'             => 'nullable|email|max:150|unique:users,email,' . $id . ',reference_id',
+      'employment_status' => 'required|string|in:Tetap,Kontrak,Magang',
+      'start_date'        => 'required|date',
+      'status'            => 'required|string|in:aktif,nonaktif,non-aktif',
+      'license_number'    => 'nullable|string|max:255',
+      'shift'             => 'nullable|string|max:255',
+      'last_education'    => 'nullable|string|max:255',
+      'profile_image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // 🔹 Ambil data apoteker
-    $apoteker = Apoteker::findOrFail($id);
+    DB::beginTransaction();
 
-    // 🔹 Update tabel user
-    $user = $apoteker->user;
-    $user->username = $request->username;
-    $user->email = $request->email;
-    $user->save();
+    try {
+      // 🔹 Ambil apoteker dan relasi
+      $apoteker = Apoteker::with(['person', 'user'])->findOrFail($id);
 
-    // 🔹 Update tabel person
-    $person = $apoteker->person;
-    $person->sex = $request->sex;
-    $person->dob = $request->dob;
-    $person->pob = $request->pob;
-    $person->save();
-
-    // 🔹 Normalisasi ENUM agar sesuai database
-    $status = strtolower($request->status);
-    $employment_status = strtolower($request->employment_status);
-
-    // Ubah ejaan yang salah (misal: nonaktif -> non-aktif)
-    if ($status === 'nonaktif') {
-        $status = 'non-aktif';
-    }
-
-    // 🔹 Update tabel apoteker
-    $apoteker->status = $status;
-    $apoteker->employment_status = $employment_status;
-    $apoteker->shift = $request->shift;
-    $apoteker->last_education = $request->last_education;
-    $apoteker->license_number = $request->license_number;
-    $apoteker->start_date = $request->start_date;
-
-    // 🔹 Upload foto jika ada
-    if ($request->hasFile('profile_image')) {
-        if ($apoteker->profile_image && Storage::exists('public/' . $apoteker->profile_image)) {
-            Storage::delete('public/' . $apoteker->profile_image);
+      // 🔹 Upload foto baru jika ada
+      $imagePath = $apoteker->profile_image;
+      if ($request->hasFile('profile_image')) {
+        // Hapus foto lama kalau ada
+        if ($imagePath && Storage::exists('public/' . $imagePath)) {
+          Storage::delete('public/' . $imagePath);
         }
+        $imagePath = $request->file('profile_image')->store('profiles', 'public');
+      }
 
-        $path = $request->file('profile_image')->store('apoteker', 'public');
-        $apoteker->profile_image = $path;
+      // 🔹 Update tabel people
+      $person = $apoteker->person;
+      $person->update([
+        'name'  => $request->name,
+        'sex'   => $request->sex,
+        'pob'   => $request->pob,
+        'dob'   => $request->dob,
+      ]);
+
+      // 🔹 Update tabel users
+      $user = $apoteker->user;
+      $user->update([
+        'username' => $request->username,
+        'email'    => $request->email,
+      ]);
+
+      // 🔹 Normalisasi status agar konsisten dengan database
+      $status = strtolower($request->status);
+      if ($status === 'nonaktif') $status = 'non-aktif';
+
+      // 🔹 Update tabel apoteker
+      $apoteker->update([
+        'license_number'    => $request->license_number,
+        'employment_status' => $request->employment_status,
+        'last_education'    => $request->last_education,
+        'shift'             => $request->shift,
+        'start_date'        => $request->start_date,
+        'profile_image'     => $imagePath,
+        'status'            => $status,
+      ]);
+
+      DB::commit();
+      return back()->with('success', 'Data apoteker berhasil diperbarui!');
+    } catch (\Exception $e) {
+      DB::rollBack();
+      dd([
+        'error_message' => $e->getMessage(),
+        'error_line'    => $e->getLine(),
+        'error_file'    => $e->getFile(),
+      ]);
     }
+  }
 
-    $apoteker->save();
-
-    return redirect()->back()->with('success', 'Data apoteker berhasil diperbarui!');
-}
 
 
 

@@ -8,10 +8,6 @@ use App\Models\Kategori;
 
 class KategoriC extends Controller
 {
-
-
-
-
     // 🔹 Simpan kategori baru
     public function store(Request $request)
     {
@@ -29,29 +25,23 @@ class KategoriC extends Controller
         return redirect()->route('backend.pages.inventory.tabel')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    // 🔹 Tampilkan form edit kategori
-    public function edit($id)
-    {
-        $kategori = Kategori::findOrFail($id);
-        return view('backend.pages.inventory.kategori_edit', compact('kategori'));
-    }
-
     // 🔹 Update kategori
     public function update(Request $request, $id)
     {
+        $kategori = Kategori::findOrFail($id);
+
         $request->validate([
-            'kode_kategori' => 'required|unique:kategori,kode_kategori,' . $id,
+            'kode_kategori' => 'required|unique:kategori,kode_kategori,' . $kategori->id,
             'nama_kategori' => 'required',
         ]);
 
-        $kategori = Kategori::findOrFail($id);
         $kategori->update([
             'kode_kategori' => $request->kode_kategori,
             'nama_kategori' => $request->nama_kategori,
             'deskripsi' => $request->deskripsi,
         ]);
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diupdate.');
+        return redirect()->route('backend.pages.inventory.tabel')->with('success', 'Kategori berhasil diperbarui.');
     }
 
     // 🔹 Hapus kategori
@@ -60,6 +50,6 @@ class KategoriC extends Controller
         $kategori = Kategori::findOrFail($id);
         $kategori->delete();
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus.');
+        return redirect()->route('backend.pages.inventory.tabel')->with('success', 'Kategori berhasil dihapus.');
     }
 }

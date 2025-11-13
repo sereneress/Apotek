@@ -74,18 +74,16 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
 Route::prefix('obat')->name('obat.')->group(function () {
     Route::get('/', [InventoryC::class, 'index'])->name('tabel');      // Menampilkan tabel gudang
     Route::get('/create', [ObatC::class, 'create'])->name('form'); // (Jika nanti ada form input baru)
-    Route::post('/store', [ObatC::class, 'store'])->name('store'); // Simpan data baru
-    Route::get('/edit/{id}', [ObatC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
-    Route::put('/update/{id}', [ObatC::class, 'update'])->name('update'); // Update data
-    Route::delete('/destroy/{id}', [ObatC::class, 'destroy'])->name('destroy'); // Hapus data
+    Route::post('/store', [ObatC::class, 'store'])->name('store');
+    Route::put('/update/{id}', [ObatC::class, 'update'])->name('update');
+    Route::delete('/destroy/{id}', [ObatC::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('kategori')->name('kategori.')->group(function () {
-    Route::get('/', [InventoryC::class, 'index'])->name('tabel'); // (Jika nanti ada form input baru)
-    Route::post('/store', [KategoriC::class, 'store'])->name('store'); // Simpan data baru
-    Route::get('/edit/{id}', [KategoriC::class, 'edit'])->name('edit'); // (Jika nanti ada halaman edit)
-    Route::put('/update/{id}', [KategoriC::class, 'update'])->name('update'); // Update data
-    Route::delete('/destroy/{id}', [KategoriC::class, 'destroy'])->name('destroy'); // Hapus data
+    Route::get('/', [InventoryC::class, 'index'])->name('tabel');
+    Route::post('/store', [KategoriC::class, 'store'])->name('store');
+    Route::put('/update/{id}', [KategoriC::class, 'update'])->name('update');
+    Route::delete('/destroy/{id}', [KategoriC::class, 'destroy'])->name('destroy');
 });
 
 Route::prefix('transaksi')->name('transaksi.')->group(function () {
