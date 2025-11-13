@@ -128,15 +128,115 @@
                                 </div>
 
                                 <div class="d-flex gap-1 justify-content-end">
-                                    <a href="{{ route('obat.edit', $obat->id) }}"
-                                        class="btn btn-outline-primary btn-sm py-0 px-2 rounded-pill">Edit</a>
-                                    <form action="{{ route('obat.destroy', $obat->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="btn btn-outline-danger btn-sm py-0 px-2 rounded-pill">Hapus</button>
-                                    </form>
+                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditObat{{ $obat->id }}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalDeleteObat{{ $obat->id }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 🔹 Modal Edit Obat -->
+                        <div class="modal fade" id="modalEditObat{{ $obat->id }}" tabindex="-1"
+                            aria-labelledby="modalEditObatLabel{{ $obat->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form action="{{ route('obat.update', $obat->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEditObatLabel{{ $obat->id }}">Edit Obat
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="nama_obat_{{ $obat->id }}" class="form-label">Nama
+                                                    Obat</label>
+                                                <input type="text" name="nama_obat"
+                                                    id="nama_obat_{{ $obat->id }}" class="form-control"
+                                                    value="{{ $obat->nama }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="kategori_id_{{ $obat->id }}"
+                                                    class="form-label">Kategori</label>
+                                                <select name="kategori_id" id="kategori_id_{{ $obat->id }}"
+                                                    class="form-select" required>
+                                                    @foreach ($kategoris as $kategori)
+                                                        <option value="{{ $kategori->id }}"
+                                                            {{ $kategori->id == $obat->kategori_id ? 'selected' : '' }}>
+                                                            {{ $kategori->nama_kategori }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="stok_{{ $obat->id }}" class="form-label">Stok</label>
+                                                <input type="number" name="stok" id="stok_{{ $obat->id }}"
+                                                    class="form-control" value="{{ $obat->stok }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="harga_{{ $obat->id }}" class="form-label">Harga</label>
+                                                <input type="number" name="harga" id="harga_{{ $obat->id }}"
+                                                    class="form-control" value="{{ $obat->harga }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="deskripsi_{{ $obat->id }}"
+                                                    class="form-label">Deskripsi</label>
+                                                <textarea name="deskripsi" id="deskripsi_{{ $obat->id }}" class="form-control" rows="2">{{ $obat->deskripsi }}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="bi bi-save me-1"></i> Simpan Perubahan
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- 🔹 Modal Hapus Obat -->
+                        <div class="modal fade" id="modalDeleteObat{{ $obat->id }}" tabindex="-1"
+                            aria-labelledby="modalDeleteObatLabel{{ $obat->id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title" id="modalDeleteObatLabel{{ $obat->id }}">
+                                            Konfirmasi Hapus
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        Apakah Anda yakin ingin menghapus obat <strong>{{ $obat->nama }}</strong>?
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light"
+                                            data-bs-dismiss="modal">Batal</button>
+                                        <form action="{{ route('obat.destroy', $obat->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="bi bi-trash me-1"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -275,22 +375,99 @@
                                     <td>{{ $kategori->deskripsi }}</td>
                                     <td class="text-center">
                                         <div class="btn-group" role="group" aria-label="Aksi">
-                                            <a href="{{ route('kategori.edit', $kategori->id) }}"
-                                                class="btn btn-sm btn-outline-warning" title="Edit Kategori">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                            <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    title="Hapus Kategori">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </button>
-                                            </form>
+                                            {{-- 🔹 Tombol Edit --}}
+                                            <button class="btn btn-sm btn-light-warning me-1" data-bs-toggle="modal"
+                                                data-bs-target="#modalEditKategori{{ $kategori->id }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+
+                                            {{-- 🔹 Tombol Hapus --}}
+                                            <button class="btn btn-sm btn-light-danger" data-bs-toggle="modal"
+                                                data-bs-target="#modalDeleteKategori{{ $kategori->id }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
+                                {{-- 🔸 Modal Edit Kategori --}}
+                                <div class="modal fade" id="modalEditKategori{{ $kategori->id }}" tabindex="-1"
+                                    aria-labelledby="modalEditKategoriLabel{{ $kategori->id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 border-0 shadow">
+                                            <div class="modal-header border-0 pb-0">
+                                                <h5 class="modal-title fw-semibold"
+                                                    id="modalEditKategoriLabel{{ $kategori->id }}">
+                                                    Edit Kategori Obat
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+
+                                            <form action="{{ route('kategori.update', $kategori->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-body pt-0">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Kode Kategori</label>
+                                                        <input type="text" name="kode_kategori" class="form-control"
+                                                            value="{{ $kategori->kode_kategori }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Nama Kategori</label>
+                                                        <input type="text" name="nama_kategori" class="form-control"
+                                                            value="{{ $kategori->nama_kategori }}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Deskripsi</label>
+                                                        <textarea name="deskripsi" class="form-control" rows="3">{{ $kategori->deskripsi }}</textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer border-0 pt-0">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-warning">
+                                                        <i class="bi bi-save me-1"></i> Simpan Perubahan
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- 🔸 Modal Delete Kategori --}}
+                                <div class="modal fade" id="modalDeleteKategori{{ $kategori->id }}" tabindex="-1"
+                                    aria-labelledby="modalDeleteKategoriLabel{{ $kategori->id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content rounded-4 border-0 shadow">
+                                            <div class="modal-header border-0 pb-0">
+                                                <h5 class="modal-title fw-semibold text-danger"
+                                                    id="modalDeleteKategoriLabel{{ $kategori->id }}">
+                                                    Hapus Kategori
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body pt-0">
+                                                <p>Apakah Anda yakin ingin menghapus kategori
+                                                    <strong>{{ $kategori->nama_kategori }}</strong>?
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer border-0 pt-0">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{ route('kategori.destroy', $kategori->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="bi bi-trash3 me-1"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
                         </tbody>
 

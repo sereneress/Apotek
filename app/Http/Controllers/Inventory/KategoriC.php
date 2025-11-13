@@ -41,7 +41,7 @@ class KategoriC extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        return redirect()->route('backend.pages.inventory.tabel')->with('success', 'Kategori berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Kategori Berhasil Diperbaharui!');
     }
 
     // 🔹 Hapus kategori
@@ -50,6 +50,6 @@ class KategoriC extends Controller
         $kategori = Kategori::findOrFail($id);
         $kategori->delete();
 
-        return redirect()->route('backend.pages.inventory.tabel')->with('success', 'Kategori berhasil dihapus.');
+        return redirect()->back()->with('success', 'Kategori Berhasil Dihapus!');
     }
 }
